@@ -12,4 +12,8 @@
     <PackageReference Include="AutoMapper" Version="10.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArduinoConnect.DataAccess\ArduinoConnect.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
