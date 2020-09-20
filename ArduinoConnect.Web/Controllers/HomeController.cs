@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ArduinoConnect.Web.Models;
+using ArduinoConnect.DataAccess.DataAccess;
+using ArduinoConnect.DataAccess.BusinessLogic;
 
 namespace ArduinoConnect.Web.Controllers
 {
@@ -13,7 +15,7 @@ namespace ArduinoConnect.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ISqlDataAccess sqlDataAccess)
         {
             _logger = logger;
         }
