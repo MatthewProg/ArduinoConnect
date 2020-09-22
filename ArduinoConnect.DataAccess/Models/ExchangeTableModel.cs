@@ -10,5 +10,6 @@ namespace ArduinoConnect.DataAccess.Models
         public int OwnerID { get; set; }
         public int ReceieverID { get; set; }
         public string Command { get; set; }
+        public string ReceiverDevice { get; set; }
     }
 }
