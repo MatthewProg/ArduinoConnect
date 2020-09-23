@@ -1,9 +1,6 @@
 ﻿using ArduinoConnect.DataAccess.DataAccess;
 using ArduinoConnect.DataAccess.Models;
 using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ArduinoConnect.DataAccess.BusinessLogic
 {
@@ -20,11 +17,9 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
         {
             string name = "CreateUniqueToken";
 
-            var output = _dataAccess.ExecuteStoredProcedureReturnSingle<TokenModel>(name,null);
+            var output = _dataAccess.ExecuteStoredProcedureReturnSingle<TokenModel>(name, null);
             return output;
         }
-
-        public bool DeleteToken(TokenModel token) => DeleteToken(token.Token);
         public bool DeleteToken(string token)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -33,5 +28,12 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedure("DeleteToken", parameters);
             return (output > 0) ? true : false;
         }
+
+        #region Overloaded methods
+
+        //DeleteToken
+        public bool DeleteToken(TokenModel token) => DeleteToken(token.Token);
+
+        #endregion
     }
 }

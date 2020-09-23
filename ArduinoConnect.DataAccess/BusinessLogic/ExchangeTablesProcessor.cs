@@ -2,10 +2,7 @@
 using ArduinoConnect.DataAccess.DataAccess;
 using ArduinoConnect.DataAccess.Models;
 using Dapper;
-using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ArduinoConnect.DataAccess.BusinessLogic
 {

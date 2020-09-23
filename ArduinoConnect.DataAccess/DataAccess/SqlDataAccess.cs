@@ -1,11 +1,8 @@
 ﻿using Dapper;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace ArduinoConnect.DataAccess.DataAccess
 {
@@ -17,11 +14,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
         {
             ConnectionString = connectionString;
         }
-        //public static string GetConnectionString(IConfiguration config, string connName = "MainDB")
-        //{
-        //    return Microsoft.Extensions.Configuration.ConfigurationExtensions.GetConnectionString(config, connName);
-        //    //return ConfigurationManager.ConnectionStrings[connName].ConnectionString;
-        //}
 
         public List<T> LoadDataList<T>(string sql, DynamicParameters parameters)
         {
@@ -30,7 +22,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.Query<T>(sql, parameters).ToList();
             }
         }
-
         public T LoadDataSingle<T>(string sql, DynamicParameters parameters)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))
@@ -38,7 +29,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.QueryFirstOrDefault<T>(sql, parameters);
             }
         }
-
         public int SaveData<T>(string sql, T data)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))
@@ -46,7 +36,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.Execute(sql, data);
             }
         }
-
         public int Execute(string sql, DynamicParameters parameters)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))
@@ -54,7 +43,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.Execute(sql, parameters);
             }
         }
-
         public int ExecuteStoredProcedure(string name, DynamicParameters parameters)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))
@@ -64,7 +52,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.Execute(name, parameters, commandType: CommandType.StoredProcedure);
             }
         }
-
         public T ExecuteStoredProcedureReturnSingle<T>(string name, DynamicParameters parameters)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))
@@ -74,7 +61,6 @@ namespace ArduinoConnect.DataAccess.DataAccess
                 return conn.QueryFirstOrDefault<T>(name, parameters, commandType: CommandType.StoredProcedure);
             }
         }
-
         public List<T> ExecuteStoredProcedureReturnList<T>(string name, DynamicParameters parameters)
         {
             using (IDbConnection conn = new SqlConnection(ConnectionString))

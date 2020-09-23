@@ -2,21 +2,19 @@
 using ArduinoConnect.DataAccess.DataAccess;
 using ArduinoConnect.DataAccess.Models;
 using Dapper;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ArduinoConnect.DataAccess.BusinessLogic
 {
     public class UserTablesProcessor
     {
         private readonly ISqlDataAccess _dataAccess;
-        
+
         public UserTablesProcessor(ISqlDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
         }
-        
+
         public List<UserTableModel> GetTables(string token)
         {
             string name = "TokenUserTables";
@@ -86,7 +84,6 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedure(name, parameters);
             return (output > 0) ? true : false;
         }
-        
 
         #region Overloaded methods
 
