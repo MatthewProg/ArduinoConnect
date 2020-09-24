@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ArduinoConnect.DataAccess.DataAccess;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AutoMapper;
 
 namespace ArduinoConnect.Web
 {
@@ -34,11 +30,9 @@ namespace ArduinoConnect.Web
                 cfg.CreateMap<DataAccess.Models.UserTableModel, Web.ResponseModels.UserTableModel>();
 
                 //Request -> DataAccess
-                //NOT USED cfg.CreateMap<Web.RequestModels.DataTableModel, DataAccess.Models.DataTableModel>();
+                cfg.CreateMap<Web.RequestModels.DataTableModel, DataAccess.Models.DataTableModel>();
                 cfg.CreateMap<Web.RequestModels.ExchangeTableModel, DataAccess.Models.ExchangeTableModel>();
-                //NOT USED cfg.CreateMap<Web.RequestModels.ReceiverModel, DataAccess.Models.ReceiverModel>();
-                //NOT USED cfg.CreateMap<Web.RequestModels.TokenModel, DataAccess.Models.TokenModel>();
-                //NOT USED cfg.CreateMap<Web.RequestModels.UserTableModel, DataAccess.Models.UserTableModel>();
+                cfg.CreateMap<Web.RequestModels.UserTableModel, DataAccess.Models.UserTableModel>();
             });
             var mapper = config.CreateMapper();
 

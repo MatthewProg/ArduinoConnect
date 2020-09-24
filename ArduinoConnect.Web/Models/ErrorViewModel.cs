@@ -1,5 +1,3 @@
-using System;
-
 namespace ArduinoConnect.Web.Models
 {
     public class ErrorViewModel

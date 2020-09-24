@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ArduinoConnect.DataAccess.DataAccess;
+﻿using ArduinoConnect.DataAccess.DataAccess;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ArduinoConnect.Web.Controllers.API
 {
@@ -33,7 +27,7 @@ namespace ArduinoConnect.Web.Controllers.API
 
         //DELETE: api/Tokens/Delete?token=XXX
         [HttpDelete("{token}")]
-        public IActionResult Delete([FromQuery]string token)
+        public IActionResult Delete([FromQuery] string token)
         {
             var output = _tokenProcessor.DeleteToken(token);
             if (output == true)

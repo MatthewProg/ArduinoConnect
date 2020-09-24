@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ArduinoConnect.DataAccess.DataAccess;
+using ArduinoConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ArduinoConnect.Web.Models;
-using ArduinoConnect.DataAccess.DataAccess;
-using ArduinoConnect.DataAccess.BusinessLogic;
+using System.Diagnostics;
 
 namespace ArduinoConnect.Web.Controllers
 {

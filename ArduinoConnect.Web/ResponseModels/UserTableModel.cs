@@ -12,7 +12,7 @@ namespace ArduinoConnect.Web.ResponseModels
         public int OwnerID { get; set; }
 
         [Required]
-        [StringLength(30,ErrorMessage = "Name cannot be longer than 50 characters.")]
+        [StringLength(30, ErrorMessage = "Name cannot be longer than 50 characters.")]
         [DisplayName("Name")]
         public string TableName { get; set; }
 
