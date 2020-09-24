@@ -97,45 +97,45 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
 
         //ClearExchange
         public int ClearExchange(TokenModel token, ExchangeTableModel model)
-            => ClearExchange(token.Token, model.ReceiverDevice, model.ReceieverID);
+            => ClearExchange(token.Token, model.ReceiverDevice, model.ReceiverID);
         public int ClearExchange(string token, ExchangeTableModel model)
-            => ClearExchange(token, model.ReceiverDevice, model.ReceieverID);
+            => ClearExchange(token, model.ReceiverDevice, model.ReceiverID);
         public int ClearExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
             => ClearExchange(token.Token, receiverDevice, receiverID);
 
 
         //CreateExchange
         public ExchangeTableModel CreateExchange(string token, ExchangeTableModel model)
-            => CreateExchange(token, model.Command, model.ReceieverID, model.ReceiverDevice);
+            => CreateExchange(token, model.Command, model.ReceiverID, model.ReceiverDevice);
         public ExchangeTableModel CreateExchange(TokenModel token, ExchangeTableModel model)
-            => CreateExchange(token.Token, model.Command, model.ReceieverID, model.ReceiverDevice);
+            => CreateExchange(token.Token, model.Command, model.ReceiverID, model.ReceiverDevice);
         public ExchangeTableModel CreateExchange(TokenModel token, string command, int receiverID, string receiverDevice = null)
             => CreateExchange(token.Token, command, receiverID, receiverDevice);
 
 
         //GetAllExchange
         public List<ExchangeTableModel> GetAllExchange(TokenModel token, ExchangeTableModel model)
-            => GetAllExchange(token.Token, model.ReceiverDevice, model.ReceieverID);
+            => GetAllExchange(token.Token, model.ReceiverDevice, model.ReceiverID);
         public List<ExchangeTableModel> GetAllExchange(string token, ExchangeTableModel model)
-            => GetAllExchange(token, model.ReceiverDevice, model.ReceieverID);
+            => GetAllExchange(token, model.ReceiverDevice, model.ReceiverID);
         public List<ExchangeTableModel> GetAllExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
             => GetAllExchange(token.Token, receiverDevice, receiverID);
 
 
         //GetOldestExchange
         public ExchangeTableModel GetOldestExchange(TokenModel token, ExchangeTableModel model)
-            => GetOldestExchange(token.Token, model.ReceiverDevice, model.ReceieverID);
+            => GetOldestExchange(token.Token, model.ReceiverDevice, model.ReceiverID);
         public ExchangeTableModel GetOldestExchange(string token, ExchangeTableModel model)
-            => GetOldestExchange(token, model.ReceiverDevice, model.ReceieverID);
+            => GetOldestExchange(token, model.ReceiverDevice, model.ReceiverID);
         public ExchangeTableModel GetOldestExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
             => GetOldestExchange(token.Token, receiverDevice, receiverID);
 
 
         //GetNoOfExchange
         public int GetNoOfExchange(TokenModel token, ExchangeTableModel model)
-            => GetNoOfExchange(token.Token, model.ReceiverDevice, model.ReceieverID);
+            => GetNoOfExchange(token.Token, model.ReceiverDevice, model.ReceiverID);
         public int GetNoOfExchange(string token, ExchangeTableModel model)
-            => GetNoOfExchange(token, model.ReceiverDevice, model.ReceieverID);
+            => GetNoOfExchange(token, model.ReceiverDevice, model.ReceiverID);
         public int GetNoOfExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
             => GetNoOfExchange(token.Token, receiverDevice, receiverID);
         #endregion
