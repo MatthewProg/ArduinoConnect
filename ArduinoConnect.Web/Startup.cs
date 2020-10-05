@@ -1,7 +1,10 @@
 using ArduinoConnect.DataAccess.DataAccess;
+using ArduinoConnect.Web.Managers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +20,6 @@ namespace ArduinoConnect.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var config = new MapperConfiguration(cfg =>
@@ -37,7 +39,15 @@ namespace ArduinoConnect.Web
             var mapper = config.CreateMapper();
 
             services.AddSingleton(mapper);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Start/Index";
+                    options.Cookie.Name = "ArduinoConnectCookie";
+                });
             services.AddControllersWithViews();
+            services.AddSingleton<IHttpClientManager, HttpClientManager>();
+            services.AddSingleton<IApiManager, ApiManager>();
             services.AddSingleton<ISqlDataAccess, SqlDataAccess>(serviceProvider =>
             {
                 return new SqlDataAccess(Configuration.GetConnectionString("MainDB"));
@@ -53,19 +63,26 @@ namespace ArduinoConnect.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Start/Error");
             }
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict
+            };
+            app.UseCookiePolicy(cookiePolicyOptions);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Start}/{action=Index}/{id?}");
             });
         }
     }

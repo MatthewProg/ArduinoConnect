@@ -4,6 +4,8 @@ namespace ArduinoConnect.Web.Models
     {
         public string RequestId { get; set; }
 
+        public short ErrorCode { get; set; }
+
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }

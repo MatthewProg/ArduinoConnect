@@ -1,18 +1,12 @@
 ﻿@model ErrorViewModel
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "Error 404";
     Layout = "_ErrorLayout";
 }
 
 <div class="text-center d-flex flex-column top-20 main-block">
-    <h1 class="font-weight-bold">
-        Error
-        @if (Model.ErrorCode != 0)
-        {
-            @Model.ErrorCode;
-        }
-    </h1>
-    <h3 class="font-weight-normal">Something gone wrong :(</h3>
+    <h1 class="font-weight-bold">Error 404</h1>
+    <h3 class="font-weight-normal">Page  not found</h3>
 
     @if (Model.ShowRequestId)
     {

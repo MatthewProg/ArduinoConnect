@@ -1,0 +1,28 @@
+﻿@model ArduinoConnect.Web.RequestModels.TokenModel 
+@{
+    ViewData["Title"] = "Start";
+}
+
+<div class="top-20 text-center justify-content-center align-items-center">
+    <h1 class="flex-row">What's your token?</h1><br />
+    <form method="post" asp-action="Login" class="mb-3 d-flex flex-column justify-content-center align-items-center">
+        <div asp-validation-summary="ModelOnly" class="text-danger flex-row"></div>
+        <div class="input-group token-box">
+            <input asp-for="Token" class="form-control" placeholder="Token" aria-label="Token" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <input type="submit" value="Confirm" class="input-group-text btn btn-primary" />
+            </div>
+        </div>
+        <span asp-validation-for="Token" class="text-danger"></span>
+    </form>
+    <form method="post" asp-action="GenerateToken">
+        <a href="#" onclick="this.closest('form').submit();return false;" class="">
+            <i class="fa fa-refresh"></i>
+            <span>Generate token</span>
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
