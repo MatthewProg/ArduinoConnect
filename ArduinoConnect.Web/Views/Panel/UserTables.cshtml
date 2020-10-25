@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "User Tables";
+    ViewData["LoggedIn"] = true;
+
+    List<ArduinoConnect.Web.ResponseModels.UserTableModel> UserTables = ViewData["UserTables"] as List<ArduinoConnect.Web.ResponseModels.UserTableModel>;
+}
+
+@{
+    await Html.RenderPartialAsync("_UserTablesPartial", UserTables);
+}

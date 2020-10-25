@@ -30,8 +30,18 @@ namespace ArduinoConnect.Web.Controllers
             _apiManager = apiManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if(t != null)
+            {
+                var res = await VerifyToken(t) as JsonResult;
+                bool good = false;
+                bool ok = bool.TryParse(res.Value.ToString(), out good);
+                if (good && ok)
+                    return RedirectToAction("Index", "Panel");
+            }
             return View();
         }
 

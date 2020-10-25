@@ -63,7 +63,8 @@ namespace ArduinoConnect.Web
             }
             else
             {
-                app.UseExceptionHandler("/Start/Error");
+                //app.UseExceptionHandler("/Error/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/Error","?errorCode={0}");
             }
             app.UseStaticFiles();
 

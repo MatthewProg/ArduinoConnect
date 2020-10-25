@@ -1,6 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
+﻿/* - - - - - - - - GLOBAL - - - - - - - -*/
 .token-box {
     max-width: 550px;
 }
@@ -10,11 +8,95 @@ for details on configuring this project to bundle and minify static web assets. 
     top: 20vh;
 }
 
+.section-header {
+    font-size: 2.2rem;
+    font-weight: 500;
+    text-decoration:underline;
+    margin-top: .5rem;
+}
+
+.just-link {
+    color: #0366d6;
+    border: 0px solid white;
+    padding: 0;
+    background-color: transparent;
+}
+
+.just-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.just-link:focus {
+    outline: 0px;
+}
+
+
+/* - - - - - - - RADIO SWITCH - - - - - - - -*/
+.radio-group input[type=radio] {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+}
+
+.radio-group input[type=radio]:checked + label {
+    background-color: #007bff;
+    color: white;
+}
+
+.radio-group input[type=radio] + label {
+    background-color: white;
+    color: #007bff;
+}
+
+.radio-group label {
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 4px 15px;
+    margin: 0;
+    border: 1px solid #007bff;
+}
+
+.radio-group {
+    border: 1px solid #007bff;
+    border-collapse: collapse;
+    border-radius: 3px;
+}
+
+
+
+/*- - - - - - - MODAL STYLE - - - - - -*/
+.modal-footer button {
+    width: 120px;
+}
+
+.modal-dialog {
+    max-width: 350px;
+}
+.modal-header {
+    font-size: 1.5em;
+    border-bottom: 0px solid white;
+}
+
+.modal-body {
+    color: dimgray;
+    margin: 0px;
+}
+
+.modal-footer {
+    border-top: 0px solid white;
+}
+
+
+
+
+
 /*- - - - - - - DEFAULT CONFIG - - - - - -*/
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */

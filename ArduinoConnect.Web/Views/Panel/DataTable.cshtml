@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Table";
+    ViewData["LoggedIn"] = true;
+
+    ArduinoConnect.Web.ResponseModels.UserTableModel UserTables = ViewData["UserTables"] as ArduinoConnect.Web.ResponseModels.UserTableModel;
+}
+
+<div aria-live="polite" aria-atomic="true" style="position: relative;z-index:5;">
+    <div style="position: absolute; top: 0; right: 0;">
+        <div id="deleteToast" data-autohide="false" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body align-items-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only"></span>
+                </div>
+                <span>0/0 deleted</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-inline-flex">
+    <h3 class="">@UserTables.TableName</h3>
+    <h3 class="ml-3 text-muted text-decoration-none"><i id="tabId">#@UserTables.TableID</i></h3>
+</div>
+<p>@UserTables.TableDescription</p>
+
+@{await Html.RenderPartialAsync("_DataTableTablePartial", this.ViewData); }
+
+@section ModalSection {
+    <div id="modalDeleteProgess" class="modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header flex-column">
+                    <h4 class="modal-title text-center w-100">Deleting <span id="deletedAll">0</span> records</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="progress">
+                        <div id="deleteProgress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    </div>
+                    <p>
+                        Success: <span id="deletedSuccess">0</span><br />
+                        Error: <span id="deletedError">0</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalDataDelete" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header flex-column">
+                    <h4 class="modal-title text-center w-100">Are you sure?</h4>
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                </div>
+                <div class="modal-body text-center">
+                    <p>Do you really want to delete these records? This process cannot be undone.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="deleteDataButton" type="button" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

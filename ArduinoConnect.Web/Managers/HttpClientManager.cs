@@ -37,11 +37,11 @@ namespace ArduinoConnect.Web.Managers
         public async Task<HttpResponseMessage> Post(string route, string query, string data)
         {
             var builder = new UriBuilder(_apiUrl);
-            builder.Path = route;
+            builder.Path += route;
             builder.Query = query;
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = builder.Uri;
+                client.BaseAddress = new Uri(_apiUrl + route);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -54,11 +54,11 @@ namespace ArduinoConnect.Web.Managers
         public async Task<HttpResponseMessage> Put(string route, string query, string data)
         {
             var builder = new UriBuilder(_apiUrl);
-            builder.Path = route;
+            builder.Path += route;
             builder.Query = query;
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = builder.Uri;
+                client.BaseAddress = new Uri(_apiUrl + route);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -71,11 +71,11 @@ namespace ArduinoConnect.Web.Managers
         public async Task<HttpResponseMessage> Delete(string route, string query)
         {
             var builder = new UriBuilder(_apiUrl);
-            builder.Path = route;
+            builder.Path += route;
             builder.Query = query;
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = builder.Uri;
+                client.BaseAddress = new Uri(_apiUrl + route);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 

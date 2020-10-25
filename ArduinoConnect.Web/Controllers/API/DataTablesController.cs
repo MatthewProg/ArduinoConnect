@@ -32,7 +32,7 @@ namespace ArduinoConnect.Web.Controllers.API
 
         //POST: api/data/Add?token=XXX&tableId=X
         [Route("[action]")]
-        [HttpDelete("{token}")]
+        [HttpPost("{token}")]
         public IActionResult Add([FromQuery] string token, [FromBody] RequestModels.DataTableModel value)
         {
             if (ModelState.IsValid == false)
