@@ -18,7 +18,7 @@ namespace ArduinoConnect.Web.Controllers.API
             _mapper = mapper;
         }
 
-        // GET: api/tables/GetTable?token=XXX&tableId=X
+        // GET: api/tables/GetTables?token=XXX&tableId=X
         [Route("[action]")]
         [HttpGet("{token}/{tableId?}")]
         public IActionResult GetTables([FromQuery] string token, [FromQuery] int? tableId = null)
@@ -58,7 +58,7 @@ namespace ArduinoConnect.Web.Controllers.API
             if (output == null)
                 return BadRequest();
             else
-                return Ok(output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/tables/GetTables",output);
         }
 
         //PUT: api/tables/Update?token=XXX&tableId=X

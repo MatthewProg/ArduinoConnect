@@ -47,7 +47,7 @@ namespace ArduinoConnect.Web.Controllers.API
             if (output == null)
                 return BadRequest();
             else
-                return Ok(output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/data/GetTables",output);
         }
 
         //DELETE: api/data/Delete?token=XXX&tableId=X&id=X

@@ -1,0 +1,25 @@
+﻿@model ArduinoConnect.Web.RequestModels.ExchangeTableModel
+<div class="">
+    <h6>Specify action target (optional):</h6>
+    <form id="processForm" onsubmit="return false;" asp-action="ExchangeProcess" method="post" class="form-inline justify-content-between">
+        <div class="d-flex">
+            <div class="form-group">
+                <label>Receiver ID: </label>
+                <select id="processFormReceiverId" name="receiverID" class="form-control ml-1">
+                    <option value="-1" selected>NOT SET</option>
+                    <option value="1">1 (WEB)</option>
+                    <option value="2">2 (DEVICE)</option>
+                </select>
+            </div>
+            <div class="ml-3 form-group">
+                <label>Device name (optional): </label>@Html.TextBoxFor(m => m.ReceiverDevice, new { @class = "form-control ml-1", id= "processFormReceiverDevice" })
+            </div>
+        </div>
+        <div class="d-flex mt-1">
+            <button type="submit" name="action" value="get-newest" class="processBtn btn btn-primary mr-1">Get newest</button>
+            <button type="submit" name="action" value="get-oldest" class="processBtn btn btn-primary mr-1">Get oldest</button>
+            <button type="submit" name="action" value="get-all" class="processBtn btn btn-primary mr-1">Get all</button>
+            <button type="submit" name="action" value="del-all" class="processBtn btn btn-danger mr-1">Delete all (specified)</button>
+        </div>
+    </form>
+</div>

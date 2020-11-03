@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ArduinoConnect.Web.ResponseModels.ExchangeTableModel>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr class="text-center">
+                <th>ID</th>
+                <th>Add time</th>
+                <th>Receiver ID</th>
+                <th>Device name</th>
+                <th class="flex-fill">Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-nowrap">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AddTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReceiverID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReceiverDevice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Command)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

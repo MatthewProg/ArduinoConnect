@@ -23,18 +23,10 @@
       },
       "applicationUrl": "http://localhost:5000"
     },
-    "LocalhostWeb": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://192.168.2.192:5000"
-    },
     "Production": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000"
+      "applicationUrl": "http://192.168.2.192:5000"
     }
   }
 }

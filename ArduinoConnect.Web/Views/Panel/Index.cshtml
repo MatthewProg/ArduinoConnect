@@ -8,11 +8,10 @@
 <h2 class="section-header">General</h2>
 
 <p><b>Token: </b>@ViewData["Token"]</p>
+@{ await Html.RenderPartialAsync("_ExchangeInfoPartial", this.ViewData); }
 
-@{
-    await Html.RenderPartialAsync("_ExchangeInfoPartial", this.ViewData);
-    await Html.RenderPartialAsync("_UserTablesPartial", UserTables);
-}
+<h2 class="section-header">Tables</h2>
+@{ await Html.RenderPartialAsync("_UserTablesPartial", UserTables); }
 
 @section ModalSection {
     <div id="modalDelete" class="modal fade">

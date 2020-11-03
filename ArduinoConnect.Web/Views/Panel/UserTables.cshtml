@@ -5,6 +5,5 @@
     List<ArduinoConnect.Web.ResponseModels.UserTableModel> UserTables = ViewData["UserTables"] as List<ArduinoConnect.Web.ResponseModels.UserTableModel>;
 }
 
-@{
-    await Html.RenderPartialAsync("_UserTablesPartial", UserTables);
-}
+<h2 class="section-header">Tables</h2>
+@{ await Html.RenderPartialAsync("_UserTablesPartial", UserTables); }

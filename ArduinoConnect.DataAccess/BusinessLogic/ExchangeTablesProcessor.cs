@@ -62,6 +62,23 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedureReturnList<ExchangeTableModel>(name, parameters);
             return output;
         }
+
+        public ExchangeTableModel GetNewestExchange(string token, string receiverDevice = null, int? receiverID = null)
+        {
+            string name = "GetNewestExchange";
+
+            token = StringConverter.MakeWhitespaceNull(token);
+            receiverDevice = StringConverter.MakeWhitespaceNull(receiverDevice);
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("token", token, System.Data.DbType.String);
+            parameters.Add("receiverDevice", receiverDevice, System.Data.DbType.String);
+            parameters.Add("receiverID", receiverID, System.Data.DbType.Int32);
+
+            var output = _dataAccess.ExecuteStoredProcedureReturnSingle<ExchangeTableModel>(name, parameters);
+            return output;
+        }
+
         public ExchangeTableModel GetOldestExchange(string token, string receiverDevice = null, int? receiverID = null)
         {
             string name = "GetOldestExchange";

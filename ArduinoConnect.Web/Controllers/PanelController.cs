@@ -23,6 +23,10 @@ namespace ArduinoConnect.Web.Controllers
             _apiManager = apiManager;
         }
 
+
+        //===========================================//
+        // - - - - - - - - - INDEX - - - - - - - - - //
+        //===========================================//
         [Route("[controller]/[action]")]
         [Route("[controller]/Info")]
         [Route("[controller]")]
@@ -46,6 +50,11 @@ namespace ArduinoConnect.Web.Controllers
             return View();
         }
 
+
+        //===========================================//
+        // - - - - - - - USER TABLES - - - - - - - - //
+        //===========================================//
+        [Route("[controller]/[action]")]
         public async Task<IActionResult> UserTables()
         {
             var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
@@ -63,7 +72,27 @@ namespace ArduinoConnect.Web.Controllers
             return View();
         }
 
+        [Route("[controller]/[action]/{id}")]
+        [HttpPost("{id}")]
+        public async Task<IActionResult> DeleteUserTable(int id)
+        {
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
 
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var output = await _apiManager.UserTableDelete(t, id);
+
+            if(output)
+                return RedirectToAction("UserTables");
+            else
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+        }
+
+
+        //===========================================//
+        //- - - - - - - - DATA TABLE - - - - - - - - //
+        //===========================================//
         [Route("[controller]/[action]/{id}/{raw?}/{displayData?}/{order?}/{orderCol?}/{parse?}")]
         public async Task<IActionResult> DataTable(int id, bool raw = false, int displayData = 25, string order = "ASC", string orderCol = "ID", bool parse = true)
         {
@@ -95,24 +124,7 @@ namespace ArduinoConnect.Web.Controllers
                 return Json(data);
         }
 
-        [Route("[action]")]
-        [HttpPost("{id}")]
-        public async Task<IActionResult> DeleteUserTable(int id)
-        {
-            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
-
-            if (t == null)
-                return RedirectToAction("Error", "Error", new { errorCode = 400 });
-
-            var output = await _apiManager.UserTableDelete(t, id);
-
-            if(output)
-                return RedirectToAction("UserTables");
-            else
-                return RedirectToAction("Error", "Error", new { errorCode = 400 });
-        }
-
-        [Route("[action]")]
+        [Route("[controller]/[action]")]
         [HttpPost("{tableId}/{id}")]
         public async Task<bool> DeleteData([FromQuery]int tableId, [FromQuery]int id)
         {
@@ -126,8 +138,109 @@ namespace ArduinoConnect.Web.Controllers
             return output;
         }
 
-        public async Task<int> WaitingExchanges(string token, int? receiverId = null, string receiverDevice = null)
+
+        //===========================================//
+        //  - - - - - - - - EXCHANGE - - - - - - - - //
+        //===========================================//
+        [Route("[controller]/[action]")]
+        public IActionResult Exchange()
         {
+            if (TempData["MessageSent"] != null)
+                ViewData["MessageSent"] = TempData["MessageSent"];
+            else
+                ViewData["MessageSent"] = false;
+
+            return View();
+        }
+
+        [Route("[controller]/[action]")]
+        [HttpPost("{action}/{receiverId?}/{receiverDevice?}")]
+        public async Task<IActionResult> ExchangeProcess([FromQuery] string action, [FromQuery] int? receiverID = null, [FromQuery] string receiverDevice = null)
+        {
+            var errorReturn = PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>() { new ResponseModels.ExchangeTableModel() { ID = -1, ReceiverDevice = "ERROR", ReceiverID = -1, Command = "ERROR", AddTime = new DateTime(1, 1,1, 0, 0, 0) } });
+            
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null || string.IsNullOrWhiteSpace(action))
+                return errorReturn;
+
+            switch (action)
+            {
+                case "get-newest":
+                    var o1 = await _apiManager.ExchangeTableNewest(t, receiverID, receiverDevice);
+                    if (o1 == null)
+                        return PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>());
+                    else
+                        return PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>() { o1 });
+                case "get-oldest":
+                    var o2 = await _apiManager.ExchangeTableOldest(t, receiverID, receiverDevice);
+                    if (o2 == null)
+                        return PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>());
+                    else
+                        return PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>() { o2 });
+                case "get-all":
+                    var o3 = await _apiManager.ExchangeTableAll(t, receiverID, receiverDevice);
+                    if (o3 == null)
+                        return PartialView("_ExchangeTablePartial", new List<ResponseModels.ExchangeTableModel>());
+                    else
+                        return PartialView("_ExchangeTablePartial", o3);
+                case "del-all":
+                    var o4 = await _apiManager.ExchangeTableDelete(t, receiverID, receiverDevice);
+                    return Json(o4);
+                default:
+                    return errorReturn;
+            }
+        }
+
+        [Route("[controller]/[action]")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExchangeNew([FromForm] RequestModels.ExchangeTableModel model)
+        {
+            if (ModelState.IsValid == false)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var response = await _apiManager.ExchangeTableNew(t, model);
+
+            if(response)
+            {
+                TempData["MessageSent"] = true;
+                return RedirectToAction("Exchange");
+            }
+            else
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+        }
+
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> ExchangeInfo()
+        {
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            ViewData["ExchangeWeb"] = await WaitingExchanges(t, 1, null);
+            ViewData["ExchangeOther"] = await WaitingExchanges(t, null, null) - ((int)ViewData["ExchangeWeb"]);
+
+            return PartialView("_ExchangeInfoPartial", this.ViewData);
+        }
+
+        [Route("[controller]/[action]/{token?}/{receiverId?}/{receiverDevice?}")]
+        public async Task<int> WaitingExchanges(string token = null, int? receiverId = null, string receiverDevice = null)
+        {
+            if(string.IsNullOrWhiteSpace(token))
+            {
+                token = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+                if (token == null)
+                    return -1;
+            }
+
             var output = await _apiManager.ExchangeTableNoOf(token, receiverId, receiverDevice);
 
             return output;

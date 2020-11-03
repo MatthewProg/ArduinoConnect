@@ -5,9 +5,6 @@ namespace ArduinoConnect.Web.RequestModels
 {
     public class ExchangeTableModel
     {
-        [Key]
-        public int ID { get; set; }
-
         [Required]
         public int ReceiverID { get; set; }
 

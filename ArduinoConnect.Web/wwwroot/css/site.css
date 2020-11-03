@@ -3,6 +3,16 @@
     max-width: 550px;
 }
 
+.flex-break {
+    flex-basis: 100%;
+}
+
+.custom-border {
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: .5rem;
+}
+
 .top-20 {
     position: relative;
     top: 20vh;
@@ -99,7 +109,6 @@ a.navbar-brand {
     word-break: break-all;
 }
 
-/* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
 }
@@ -151,7 +160,6 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
 .footer {
@@ -159,5 +167,5 @@ body {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 60px;
 }

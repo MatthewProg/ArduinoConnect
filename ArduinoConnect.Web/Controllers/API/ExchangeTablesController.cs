@@ -42,6 +42,18 @@ namespace ArduinoConnect.Web.Controllers.API
         }
 
 
+        // GET: api/exchange/GetNewestExchange?token=XXX&receiverDevice=XXX&receiverID=X
+        [Route("[action]")]
+        [HttpGet("{token}/{receiverDevice?}/{receiverID?}")]
+        public IActionResult GetNewestExchange([FromQuery] string token, [FromQuery] string receiverDevice = null, [FromQuery] int? receiverID = null)
+        {
+            var obj = _exchangeTablesProcessor.GetNewestExchange(token, receiverDevice, receiverID);
+            var output = _mapper.Map<ResponseModels.ExchangeTableModel>(obj);
+
+            return Ok(output);
+        }
+
+
         // GET: api/exchange/GetNoOfExchange?token=XXX&receiverDevice=XXX&receiverID=X
         [Route("[action]")]
         [HttpGet("{token}/{receiverDevice?}/{receiverID?}")]
@@ -81,7 +93,7 @@ namespace ArduinoConnect.Web.Controllers.API
             if (output == null)
                 return BadRequest();
             else
-                return Ok(output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/exchange",output);
         }
     }
 }

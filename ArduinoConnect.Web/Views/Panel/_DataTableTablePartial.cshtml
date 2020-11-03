@@ -42,7 +42,7 @@
                             @if (orderCol == "AddTime") { <option value="AddTime" selected>Add time</option> }
                             else { <option value="AddTime">Add time</option> }
                             
-                            @if (hasSchema)
+                            @if (hasSchema && parse)
                             {
                                 foreach (var key in keys)
                                 {

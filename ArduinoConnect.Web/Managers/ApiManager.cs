@@ -125,12 +125,91 @@ namespace ArduinoConnect.Web.Managers
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["token"] = token;
             if (receiverId != null) query["receiverId"] = receiverId.ToString();
-            if (string.IsNullOrWhiteSpace(receiverDevice)) query["receiverDevice"] = receiverDevice;
+            if (string.IsNullOrWhiteSpace(receiverDevice) == false) query["receiverDevice"] = receiverDevice;
 
             var response = await _httpClient.Get("exchange/GetNoOfExchange", query.ToString());
 
             var output = await response.Content.ReadAsStringAsync();
             return int.Parse(output);
+        }
+        public async Task<ResponseModels.ExchangeTableModel> ExchangeTableNewest(string token, int? receiverId = null, string receiverDevice = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (receiverId != null) query["receiverId"] = receiverId.ToString();
+            if (string.IsNullOrWhiteSpace(receiverDevice) == false) query["receiverDevice"] = receiverDevice;
+
+            var response = await _httpClient.Get("exchange/GetNewestExchange", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<ResponseModels.ExchangeTableModel>(data);
+                return output;
+            }
+            else
+                return null;
+        }
+        public async Task<ResponseModels.ExchangeTableModel> ExchangeTableOldest(string token, int? receiverId = null, string receiverDevice = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (receiverId != null) query["receiverId"] = receiverId.ToString();
+            if (string.IsNullOrWhiteSpace(receiverDevice) == false) query["receiverDevice"] = receiverDevice;
+
+            var response = await _httpClient.Get("exchange/GetOldestExchange", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<ResponseModels.ExchangeTableModel>(data);
+                return output;
+            }
+            else
+                return null;
+        }
+        public async Task<List<ResponseModels.ExchangeTableModel>> ExchangeTableAll(string token, int? receiverId = null, string receiverDevice = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (receiverId != null) query["receiverId"] = receiverId.ToString();
+            if (string.IsNullOrWhiteSpace(receiverDevice) == false) query["receiverDevice"] = receiverDevice;
+
+            var response = await _httpClient.Get("exchange/GetAllExchange", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<List<ResponseModels.ExchangeTableModel>>(data);
+                return output;
+            }
+            else
+                return null;
+        }
+        public async Task<bool> ExchangeTableDelete(string token, int? receiverId = null, string receiverDevice = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (receiverId != null) query["receiverId"] = receiverId.ToString();
+            if (string.IsNullOrWhiteSpace(receiverDevice) == false) query["receiverDevice"] = receiverDevice;
+
+            var response = await _httpClient.Delete("exchange/Delete", query.ToString());
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
+        }
+        public async Task<bool> ExchangeTableNew(string token, RequestModels.ExchangeTableModel model)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+
+            var response = await _httpClient.Post("exchange/Post", query.ToString(), JsonConvert.SerializeObject(model));
+
+            if (response.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
         }
     }
 }

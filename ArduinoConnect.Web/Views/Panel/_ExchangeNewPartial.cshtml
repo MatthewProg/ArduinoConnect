@@ -1,0 +1,32 @@
+﻿@model ArduinoConnect.Web.RequestModels.ExchangeTableModel
+
+<h4>New message</h4>
+<div>
+    <form asp-action="ExchangeNew" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-inline justify-content-between">
+            <div class="form-group mb-2">
+                <label class="control-label">Receiver ID: </label>
+                <select asp-for="ReceiverID" class="form-control ml-1">
+                    <option value="1">1 (WEB)</option>
+                    <option value="2">2 (DEVICE)</option>
+                </select>
+                <span asp-validation-for="ReceiverID" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label class="control-label">Device name (optional): </label>
+                <input asp-for="ReceiverDevice" class="form-control ml-1" />
+                <span asp-validation-for="ReceiverDevice" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label mb-0">Command: </label>
+            <input asp-for="Command" class="form-control" />
+            <span asp-validation-for="Command" class="text-danger"></span>
+        </div>
+        <div class="mt-2 form-group">
+            <input type="submit" value="Send" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
