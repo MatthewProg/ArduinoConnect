@@ -7,6 +7,7 @@ namespace ArduinoConnect.Web.Managers
     {
         Task<bool> DataTableDelete(string token, int tableId, int? id = null);
         Task<List<ResponseModels.DataTableModel>> DataTableGet(string token, int? tableId = null);
+        Task<List<ResponseModels.DataTableModel>> DataTableOffsetGet(string token, int? tableId = null, int offset = 0, int fetch = 25);
         Task<List<ResponseModels.ExchangeTableModel>> ExchangeTableAll(string token, int? receiverId = null, string receiverDevice = null);
         Task<bool> ExchangeTableDelete(string token, int? receiverId = null, string receiverDevice = null);
         Task<bool> ExchangeTableNew(string token, RequestModels.ExchangeTableModel model);

@@ -23,7 +23,10 @@
 }
 
 <div>
-    <a data-toggle="collapse" href="#settingsCollapse" role="button" aria-expanded="false" aria-controls="settingsCollapse"><i class="fa fa-gear"></i> Settings</a>
+    <div class="d-flex justify-content-between">
+        <a data-toggle="collapse" href="#settingsCollapse" role="button" aria-expanded="false" aria-controls="settingsCollapse"><i class="fa fa-gear"></i> Settings</a>
+        <a asp-action="DataTableDownload" asp-route-id="@UserTables.TableID"><i class="fa fa-download"></i> Download data</a>
+    </div>
     <div class="collapse" id="settingsCollapse">
         <div class="card card-body">
             <form method="GET">
@@ -67,6 +70,7 @@
                                 <option value="DESC" selected>Descending</option>
                             }
                         </select>
+                        <pre>NOT IMPLEMENTED YET</pre>
                     </div>
                 </div>
                 <div class="row mt-1">

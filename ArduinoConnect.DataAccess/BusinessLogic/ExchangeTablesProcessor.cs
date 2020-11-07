@@ -62,7 +62,6 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedureReturnList<ExchangeTableModel>(name, parameters);
             return output;
         }
-
         public ExchangeTableModel GetNewestExchange(string token, string receiverDevice = null, int? receiverID = null)
         {
             string name = "GetNewestExchange";
@@ -78,7 +77,6 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedureReturnSingle<ExchangeTableModel>(name, parameters);
             return output;
         }
-
         public ExchangeTableModel GetOldestExchange(string token, string receiverDevice = null, int? receiverID = null)
         {
             string name = "GetOldestExchange";
@@ -137,6 +135,15 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             => GetAllExchange(token, model.ReceiverDevice, model.ReceiverID);
         public List<ExchangeTableModel> GetAllExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
             => GetAllExchange(token.Token, receiverDevice, receiverID);
+
+
+        //GetNewestExchange
+        public ExchangeTableModel GetNewestExchange(TokenModel token, ExchangeTableModel model)
+            => GetNewestExchange(token.Token, model.ReceiverDevice, model.ReceiverID);
+        public ExchangeTableModel GetNewestExchange(string token, ExchangeTableModel model)
+            => GetNewestExchange(token, model.ReceiverDevice, model.ReceiverID);
+        public ExchangeTableModel GetNewestExchange(TokenModel token, string receiverDevice = null, int? receiverID = null)
+            => GetNewestExchange(token.Token, receiverDevice, receiverID);
 
 
         //GetOldestExchange

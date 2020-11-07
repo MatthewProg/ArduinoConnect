@@ -105,6 +105,27 @@ namespace ArduinoConnect.Web.Managers
                 return null;
             }
         }
+        public async Task<List<ResponseModels.DataTableModel>> DataTableOffsetGet(string token, int? tableId = null, int offset = 0, int fetch = 25)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (tableId != null) query["tableId"] = tableId.ToString();
+            if (tableId != null) query["offset"] = offset.ToString();
+            if (tableId != null) query["fetch"] = fetch.ToString();
+
+            var response = await _httpClient.Get("data/GetTablesOffset", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<List<ResponseModels.DataTableModel>>(data);
+                return output;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public async Task<bool> DataTableDelete(string token, int tableId, int? id = null)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);

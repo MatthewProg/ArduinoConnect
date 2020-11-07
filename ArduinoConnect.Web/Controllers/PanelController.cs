@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using ArduinoConnect.Web.Managers;
 using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -54,6 +56,7 @@ namespace ArduinoConnect.Web.Controllers
         //===========================================//
         // - - - - - - - USER TABLES - - - - - - - - //
         //===========================================//
+        [Route("[controller]/Tables")]
         [Route("[controller]/[action]")]
         public async Task<IActionResult> UserTables()
         {
@@ -136,6 +139,21 @@ namespace ArduinoConnect.Web.Controllers
             var output = await _apiManager.DataTableDelete(t,tableId, id);
 
             return output;
+        }
+
+        [Route("[controller]/[action]/{id}")]
+        public async Task<IActionResult> DataTableDownload(int id)
+        {
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var data = await _apiManager.DataTableGet(t, id);
+            if (data == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            string json = JsonConvert.SerializeObject(data);
+            return File(Encoding.UTF8.GetBytes(json), "application/json", "data.json");
         }
 
 

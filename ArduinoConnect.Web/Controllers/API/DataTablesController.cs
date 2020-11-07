@@ -30,6 +30,21 @@ namespace ArduinoConnect.Web.Controllers.API
             return Ok(output);
         }
 
+        // GET: api/data/GetTablesOffset?token=XXX&tableId=X&offset=X&fetch=X
+        [Route("[action]")]
+        [HttpGet("{token}/{tableId?}/{offset?}/{fetch?}")]
+        public IActionResult GetTablesOffset([FromQuery] string token, [FromQuery] int? tableId = null, [FromQuery] int offset = 0, [FromQuery] int fetch = 25)
+        {
+            if (offset < 0 || fetch < 0)
+                return BadRequest();
+
+            var got = _dataTablesProcessor.GetDataTablesOffset(token, tableId, offset, fetch);
+
+            var output = _mapper.Map<List<ResponseModels.DataTableModel>>(got);
+
+            return Ok(output);
+        }
+
         //POST: api/data/Add?token=XXX&tableId=X
         [Route("[action]")]
         [HttpPost("{token}")]

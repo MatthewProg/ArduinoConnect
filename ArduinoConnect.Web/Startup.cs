@@ -83,7 +83,7 @@ namespace ArduinoConnect.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Start}/{action=Index}/{id?}");
+                    pattern: "{controller=Start}/{action=Index}");
             });
         }
     }

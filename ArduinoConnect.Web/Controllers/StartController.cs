@@ -40,7 +40,7 @@ namespace ArduinoConnect.Web.Controllers
                 bool good = false;
                 bool ok = bool.TryParse(res.Value.ToString(), out good);
                 if (good && ok)
-                    return RedirectToAction("Index", "Panel");
+                    return RedirectToAction("Info", "Panel");
             }
             return View();
         }
@@ -73,7 +73,7 @@ namespace ArduinoConnect.Web.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 var props = new AuthenticationProperties();
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props).Wait();
-                return RedirectToAction("Index", "Panel");
+                return RedirectToAction("Info", "Panel");
             }
             else
                 return View("Index");
