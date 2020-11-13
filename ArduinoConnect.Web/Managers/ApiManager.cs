@@ -105,6 +105,25 @@ namespace ArduinoConnect.Web.Managers
                 return null;
             }
         }
+        public async Task<int?> DataTableGetNoOf(string token, int? tableId = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (tableId != null) query["tableId"] = tableId.ToString();
+
+            var response = await _httpClient.Get("data/GetNoOfTables", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = int.Parse(data);
+                return output;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public async Task<List<ResponseModels.DataTableModel>> DataTableOffsetGet(string token, int? tableId = null, int offset = 0, int fetch = 25)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);

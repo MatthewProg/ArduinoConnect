@@ -43,6 +43,19 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedureReturnList<DataTableModel>(name, parameters);
             return output;
         }
+        public int GetNoOfDataTables(string token, int? tableId = null)
+        {
+            string name = "GetNoOfDataTables";
+
+            token = StringConverter.MakeWhitespaceNull(token);
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("token", token, System.Data.DbType.String);
+            parameters.Add("tableId", tableId, System.Data.DbType.Int32);
+
+            var output = _dataAccess.ExecuteStoredProcedureReturnSingle<int>(name, parameters);
+            return output;
+        }
         public List<DataTableModel> GetDataTablesOffset(string token, int? tableId = null, int offset = 0, int fetch = 25)
         {
             string name = "GetDataTablesOffset";
@@ -87,6 +100,11 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
         //GetDataTables
         public List<DataTableModel> GetDataTables(TokenModel token, int? tableId = null)
             => GetDataTables(token.Token, tableId);
+
+
+        //GetNoOfDataTables
+        public int GetNoOfDataTables(TokenModel token, int? tableId = null)
+            => GetNoOfDataTables(token.Token, tableId);
 
 
         //GetDataTablesOffset

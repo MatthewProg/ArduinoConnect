@@ -20,155 +20,198 @@
     string order = (string)ViewData["order"];
     string orderCol = (string)ViewData["orderCol"];
     bool parse = (bool)ViewData["parse"];
+    int page = (int)ViewData["page"];
+    int lastPage = (int)ViewData["lastPage"];
 }
 
-<div>
-    <div class="d-flex justify-content-between">
-        <a data-toggle="collapse" href="#settingsCollapse" role="button" aria-expanded="false" aria-controls="settingsCollapse"><i class="fa fa-gear"></i> Settings</a>
-        <a asp-action="DataTableDownload" asp-route-id="@UserTables.TableID"><i class="fa fa-download"></i> Download data</a>
-    </div>
-    <div class="collapse" id="settingsCollapse">
-        <div class="card card-body">
-            <form method="GET">
-                <div class="row">
-                    <div class="col">
-                        <div class="custom-control custom-switch">
-                            @Html.CheckBoxFor(x => parse, new { @class = "custom-control-input" })
-                            <label class="custom-control-label" for="parse">Parse data to table</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <span>Order by: </span>
-                        <select name="orderCol">
-                            @if (orderCol == "ID") { <option selected>ID</option> }
-                            else { <option>ID</option> }
-                            @if (orderCol == "AddTime") { <option value="AddTime" selected>Add time</option> }
-                            else { <option value="AddTime">Add time</option> }
-                            
-                            @if (hasSchema && parse)
-                            {
-                                foreach (var key in keys)
-                                {
-                                    @if (orderCol == key.Key) { <option selected>@Html.Raw($"{key.Key}")</option> }
-                                    else { <option>@Html.Raw($"{key.Key}")</option> }          
-                                }
-                            }
-                            else
-                            {
-                                <option>Value</option>
-                            }
-                        </select>
-                        <select name="order">
-                            @if (order == "ASC")
-                            {
-                                <option value="ASC" selected>Ascending</option>
-                                <option value="DESC">Descending</option>
-                            }
-                            else
-                            {
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC" selected>Descending</option>
-                            }
-                        </select>
-                        <pre>NOT IMPLEMENTED YET</pre>
-                    </div>
-                </div>
-                <div class="row mt-1">
-                    <div class="col"></div>
-                    <div class="col">
-                        Display:
-                        <div class="radio-group d-inline-flex">
-                            <input type="radio" id="display-25" name="displayData" value="25" @if (displayData == 25) { <text>checked</text> }><label for="display-25">25</label>
-                            <input type="radio" id="display-50" name="displayData" value="50" @if (displayData == 50) { <text>checked</text> }><label for="display-50">50</label>
-                            <input type="radio" id="display-75" name="displayData" value="75" @if (displayData == 75) { <text>checked</text> }><label for="display-75">75</label>
-                            <input type="radio" id="display-100" name="displayData" value="100" @if (displayData == 100) { <text>checked</text> }><label for="display-100">100</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-3 mx-3 row justify-content-between align-items-center">
-                    <a href="@Html.Raw(Context.Request.Path + "?raw=true")" target="_blank">RAW</a>
-                    <button class="btn btn-primary" type="submit">Apply</button>
-                </div>
-            </form>
+    <div>
+        <div class="d-flex justify-content-between">
+            <a data-toggle="collapse" href="#settingsCollapse" role="button" aria-expanded="false" aria-controls="settingsCollapse"><i class="fa fa-gear"></i> Settings</a>
+            <a asp-action="DataTableDownload" asp-route-id="@UserTables.TableID"><i class="fa fa-download"></i> Download data</a>
         </div>
-    </div>
-</div>
-<div class="table-responsive">
-    <table id="dataTable" class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>ID (int)</th>
-                <th>Add time (datetime)</th>
-                @if (hasSchema && parse)
-                {
-                    foreach (var key in keys)
-                    {
-                        <th>@Html.Raw($"{key.Key} ({key.Value})")</th>
-                    }
-                    <th></th>
-                }
-                else
-                {
-                    <th>Value (string)</th>
-                    <th class="w-auto p-0"></th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var val in Data)
-            {
-                <tr id="datarow-@val.ID">
-                    <td><input type="checkbox" name="check-@val.ID" /></td>
-                    <td>@val.ID</td>
-                    <td>@val.AddTime</td>
-                    @if (hasSchema && parse)
-                    {
-                        try
-                        {
-                            var par = Newtonsoft.Json.Linq.JObject.Parse(val.Data);
-                            foreach (var key in keys)
-                            {
-                                if (par.Property(key.Key) == null)
+        <div class="collapse" id="settingsCollapse">
+            <div class="card card-body">
+                <form id="dataTableSettings" method="GET">
+                    <div class="row">
+                        <div class="col">
+                            <div class="custom-control custom-switch">
+                                @Html.CheckBoxFor(x => parse, new { @class = "custom-control-input" })
+                                <label class="custom-control-label" for="parse">Parse data to table</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <span>Order by: </span>
+                            <select name="orderCol">
+                                @if (orderCol == "ID")
                                 {
-                                    <td><i>NULL</i></td>
+                                    <option selected>ID</option>
+ }
+                                else
+                                {
+                                    <option>ID</option>
+}
+                                @if (orderCol == "AddTime")
+                                {
+                                    <option value="AddTime" selected>Add time</option>
+ }
+                                else
+                                {
+                                    <option value="AddTime">Add time</option>
+}
+
+                                @if (hasSchema && parse)
+                                {
+                                    foreach (var key in keys)
+                                    {
+                                        @if (orderCol == key.Key)
+                                        {
+                                            <option selected>@Html.Raw($"{key.Key}")</option>
+ }
+                                        else
+                                        {
+                                            <option>@Html.Raw($"{key.Key}")</option>
+}
+                                    }
                                 }
                                 else
                                 {
-                                    <td>@par.Property(key.Key).Value</td>
+                                    <option>Value</option>
                                 }
-                            }
-                            <td class="text-center">
-                                <button class="btn btn-danger dataDelete" data-id="@val.ID" data-tableId="@UserTables.TableID"><i class="fa fa-times"></i></button>
-                            </td>
-                        }
-                        catch
+                            </select>
+                            <select name="order">
+                                @if (order == "ASC")
+                                {
+                                    <option value="ASC" selected>Ascending</option>
+                                    <option value="DESC">Descending</option>
+                                }
+                                else
+                                {
+                                    <option value="ASC">Ascending</option>
+                                    <option value="DESC" selected>Descending</option>
+                                }
+                            </select>
+                            <pre>NOT IMPLEMENTED YET</pre>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col"></div>
+                        <div class="col">
+                            Display:
+                            <div class="radio-group d-inline-flex">
+                                <input type="radio" id="display-25" name="displayData" value="25" @if (displayData == 25) { <text> checked</text> }><label for="display-25">25</label>
+                                <input type="radio" id="display-50" name="displayData" value="50" @if (displayData == 50) { <text> checked</text> }><label for="display-50">50</label>
+                                <input type="radio" id="display-75" name="displayData" value="75" @if (displayData == 75) { <text> checked</text> }><label for="display-75">75</label>
+                                <input type="radio" id="display-100" name="displayData" value="100" @if (displayData == 100) { <text> checked</text> }><label for="display-100">100</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 mx-3 row justify-content-between align-items-center">
+                        <a href="@Html.Raw(Context.Request.Scheme + "://" + Context.Request.Host + "/Panel/DataTableTable?id=" + UserTables.TableID + "&raw=true&displayData=" + displayData + "&page=" + page)" target="_blank">RAW</a>
+                        <button class="btn btn-primary" type="button" onclick="applySettings(@UserTables.TableID);">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="dataTable" class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>ID (int)</th>
+                    <th>Add time (datetime)</th>
+                    @if (hasSchema && parse)
+                    {
+                        foreach (var key in keys)
                         {
-                            <td colspan="@keys.Count" class="text-center"><b>ERROR</b></td>
-                            <td class="text-center"><button class="btn btn-danger"><i class="fa fa-times"></i></button></td>
+                            <th>@Html.Raw($"{key.Key} ({key.Value})")</th>
                         }
+                        <th></th>
                     }
                     else
                     {
-                        <td>@val.Data</td>
-                        <td class="text-center"><button class="btn btn-danger"><i class="fa fa-times"></i></button></td>
+                        <th>Value (string)</th>
+                        <th class="w-auto p-0"></th>
                     }
                 </tr>
-            }
-            @if (Data.Count == 0)
-            {
-                <tr>
-                    <td colspan="100" class="text-center"><i><u>EMPTY</u></i></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-@if (Data.Count > 0)
-{
-    <div class="d-inline-flex">
-        <input type="checkbox" id="allSelected" hidden />
-        <button id="selectDataAll" class="just-link mr-3">Select all</button>
-        <button id="deleteSelected" class="just-link" data-toggle="modal" data-target="#modalDataDelete"><i class="fa fa-times"></i> Delete selected</button>
+            </thead>
+            <tbody>
+                @foreach (var val in Data)
+                {
+                    <tr id="datarow-@val.ID">
+                        <td><input type="checkbox" name="check-@val.ID" /></td>
+                        <td>@val.ID</td>
+                        <td>@val.AddTime</td>
+                        @if (hasSchema && parse)
+                        {
+                            try
+                            {
+                                var par = Newtonsoft.Json.Linq.JObject.Parse(val.Data);
+                                foreach (var key in keys)
+                                {
+                                    if (par.Property(key.Key) == null)
+                                    {
+                                        <td><i>NULL</i></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@par.Property(key.Key).Value</td>
+                                    }
+                                }
+                                <td class="text-center">
+                                    <button class="btn btn-danger dataDelete" onclick="dataDelete(@val.ID, @UserTables.TableID);"><i class="fa fa-times"></i></button>
+                                </td>
+                            }
+                            catch
+                            {
+                                <td colspan="@keys.Count" class="text-center"><b>ERROR</b></td>
+                                <td class="text-center"><button class="btn btn-danger dataDelete" onclick="dataDelete(@val.ID, @UserTables.TableID);"><i class="fa fa-times"></i></button></td>
+                            }
+                        }
+                        else
+                        {
+                            <td>@val.Data</td>
+                            <td class="text-center"><button class="btn btn-danger dataDelete" onclick="dataDelete(@val.ID, @UserTables.TableID);"><i class="fa fa-times"></i></button></td>
+                        }
+                    </tr>
+                }
+                @if (Data.Count == 0)
+                {
+                    <tr>
+                        <td colspan="100" class="text-center"><i><u>EMPTY</u></i></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-}
+    @if (Data.Count > 0)
+    {
+        <div class="d-inline-flex">
+            <input type="checkbox" id="allSelected" hidden />
+            <button onclick="selectAll();" class="just-link mr-3">Select all</button>
+            <button id="deleteSelected" class="just-link" data-toggle="modal" data-target="#modalDataDelete"><i class="fa fa-times"></i> Delete selected</button>
+        </div>
+    }
+    <div class="d-flex justify-content-center text-center">
+        <ul class="pagination">
+            @if (page > 0)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, 0,@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));" tabindex="-1">First</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, @Html.Raw(page-1),@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));">@Html.Raw(page)</a></li>
+            }
+            <li class="page-item active">
+                <a class="page-link" href="#">@Html.Raw(page + 1) <span class="sr-only">(current)</span></a>
+            </li>
+            @if (page < lastPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, @Html.Raw(page + 1),@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));">@Html.Raw(page + 2)</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, @Html.Raw(lastPage),@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));">Last</a>
+                </li>
+            }
+        </ul>
+    </div>

@@ -55,20 +55,20 @@ $('#deleteDataButton').click(function () {
     $('#modalDeleteProgess').modal('hide');
 });
 
-$('.dataDelete').click(function () {
-    var id = $(this).attr("data-id");
-    var tableId = $(this).attr("data-tableId");
-
+function dataDelete(id, tableId) {
     $.ajax({
         type: "POST",
         url: document.location.origin + "/Panel/DeleteData?tableId=" + tableId + "&id=" + id,
         success: function () {
             $('#datarow-' + id).html("");
+        },
+        error: function (e) {
+            console.log("Unable to delete data");
         }
     });  
-});
+}
 
-$('#selectDataAll').click(function () {
+function selectAll() {
     var check = false;
     if ($('#allSelected').is(':checked')) {
         check = false;
@@ -84,7 +84,32 @@ $('#selectDataAll').click(function () {
         else
             $(this).prop('checked', false);
     });
-});
+}
+
+function setDataTable(id, page = 0, displayData = 25, raw = false, order = "DESC", orderCol = "ID", parse = true) {
+    $('#dataTableTable').html("Loading...");
+    var params = { "id": id, "page": page, "displayData": displayData, "raw": raw, "order": order, "orderCol": orderCol, "parse": parse };
+    var paramsEncoded = jQuery.param(params);
+    $.ajax({
+        type: 'GET',
+        url: document.location.origin + "/Panel/DataTableTable?" + paramsEncoded,
+        success: function (data) {
+            $('#dataTableTable').html(data);
+        },
+        error: function (e) {
+            $('#dataTableTable').html("Error occured!");
+            console.log("Unable to load data");
+        }
+    });
+}
+
+function applySettings(tableId) {
+    var orderCol = $('#dataTableSettings [name="orderCol"]').val();
+    var order = $('#dataTableSettings [name="order"]').val();
+    var displayData = $('#dataTableSettings [name="displayData"]:checked').val();
+    var parse = $('#dataTableSettings [name="parse"]').prop("checked");
+    setDataTable(tableId, 0, parseInt(displayData), false, order, orderCol, parse);
+}
 
 
 
@@ -106,6 +131,9 @@ $('.processBtn').click(function () {
             url: document.location.origin + "/Panel/WaitingExchanges?" + paramsEncoded,
             success: function (data) {
                 $('#exchangeAffectedNo').text(data);
+            },
+            error: function (e) {
+                console.log("Unable to update affected exchanges number");
             }
         });
     } else {
@@ -144,7 +172,9 @@ $('#processOk').click(function () {
             }
             refreshInfo();
         },
-        error: function (e) { console.log("nope");}
+        error: function (e) {
+            console.log("Action didn't work");
+        }
     });
 
     $('#exchangeConfirmProcess').collapse('hide');
@@ -156,6 +186,9 @@ function refreshInfo() {
         url: document.location.origin + "/Panel/ExchangeInfo",
         success: function (data) {
             $('#exchangeInfo').html(data);
+        },
+        error: function (e) {
+            console.log("Unable to refresh info");
         }
     })
 }

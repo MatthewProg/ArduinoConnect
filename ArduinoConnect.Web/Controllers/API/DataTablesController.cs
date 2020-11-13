@@ -30,6 +30,19 @@ namespace ArduinoConnect.Web.Controllers.API
             return Ok(output);
         }
 
+        // GET: api/data/GetNoOfTables?token=XXX&tableId=X
+        [Route("[action]")]
+        [HttpGet("{token}/{tableId?}")]
+        public IActionResult GetNoOfTables([FromQuery] string token, [FromQuery] int? tableId = null)
+        {
+            var output = _dataTablesProcessor.GetNoOfDataTables(token, tableId);
+
+            if (output == -1)
+                return BadRequest();
+            else
+                return Ok(output);
+        }
+
         // GET: api/data/GetTablesOffset?token=XXX&tableId=X&offset=X&fetch=X
         [Route("[action]")]
         [HttpGet("{token}/{tableId?}/{offset?}/{fetch?}")]

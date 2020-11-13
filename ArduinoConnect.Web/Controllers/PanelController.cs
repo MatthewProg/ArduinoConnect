@@ -10,6 +10,7 @@ using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -96,8 +97,8 @@ namespace ArduinoConnect.Web.Controllers
         //===========================================//
         //- - - - - - - - DATA TABLE - - - - - - - - //
         //===========================================//
-        [Route("[controller]/[action]/{id}/{raw?}/{displayData?}/{order?}/{orderCol?}/{parse?}")]
-        public async Task<IActionResult> DataTable(int id, bool raw = false, int displayData = 25, string order = "ASC", string orderCol = "ID", bool parse = true)
+        [Route("[controller]/[action]/{id}")]
+        public async Task<IActionResult> DataTable(int id)
         {
             var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
 
@@ -108,11 +109,33 @@ namespace ArduinoConnect.Web.Controllers
             if(table == null || table.Count == 0)
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
 
-            var data = await _apiManager.DataTableGet(t, id);
+            ViewData["UserTables"] = table[0];
+
+            return View();
+        }
+
+        [Route("[controller]/[action]")]
+        [HttpGet("{id}/{raw?}/{displayData?}/{page?}/{order?}/{orderCol?}/{parse?}")]
+        public async Task<IActionResult> DataTableTable(int id, bool raw = false, int displayData = 25, int page = 0, string order = "DESC", string orderCol = "ID", bool parse = true)
+        {
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var data = await _apiManager.DataTableOffsetGet(t, id, page*displayData, displayData);
             if (data == null)
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
 
-            ViewData["Token"] = t;
+            var table = await _apiManager.UserTableGet(t, id);
+            if (table == null || table.Count == 0)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var lastPage = await _apiManager.DataTableGetNoOf(t, table[0].TableID);
+
+            if (order == "ASC")
+                data.Reverse();
+
             ViewData["UserTables"] = table[0];
             ViewData["Data"] = data;
 
@@ -120,9 +143,11 @@ namespace ArduinoConnect.Web.Controllers
             ViewData["order"] = order;
             ViewData["orderCol"] = orderCol;
             ViewData["parse"] = parse;
+            ViewData["page"] = page;
+            ViewData["lastPage"] = (lastPage ?? 0) / displayData;
 
             if (raw == false)
-                return View();
+                return PartialView("_DataTableTablePartial", this.ViewData);
             else
                 return Json(data);
         }
