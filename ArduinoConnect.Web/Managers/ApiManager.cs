@@ -50,7 +50,7 @@ namespace ArduinoConnect.Web.Managers
             query["token"] = token;
             if (tableId != null) query["tableId"] = tableId.ToString();
 
-            var response = await _httpClient.Get("tables/GetTable", query.ToString());
+            var response = await _httpClient.Get("tables/GetTables", query.ToString());
 
             if (response.IsSuccessStatusCode)
             {
@@ -84,6 +84,57 @@ namespace ArduinoConnect.Web.Managers
                 return true;
             else
                 return false;
+        }
+        public async Task<ResponseModels.UserTableModel> UserTableUpdate(string token, RequestModels.UserTableModel model)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+
+            var response = await _httpClient.Put("tables/Update", query.ToString(), JsonConvert.SerializeObject(model));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<ResponseModels.UserTableModel>(data);
+                return output;
+            }
+            else
+                return null;
+        }
+        public async Task<ResponseModels.UserTableModel> UserTableCreate(string token, RequestModels.UserTableModel model)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+
+            var response = await _httpClient.Post("tables/Create", query.ToString(), JsonConvert.SerializeObject(model));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = JsonConvert.DeserializeObject<ResponseModels.UserTableModel>(data);
+                return output;
+            }
+            else
+                return null;
+        }
+        public async Task<int?> UserTableGetNoOf(string token, int? tableId = null)
+        {
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["token"] = token;
+            if (tableId != null) query["tableId"] = tableId.ToString();
+
+            var response = await _httpClient.Get("tables/GetNoOfTables", query.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var output = int.Parse(data);
+                return output;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<List<ResponseModels.DataTableModel>> DataTableGet(string token, int? tableId = null)
@@ -160,7 +211,7 @@ namespace ArduinoConnect.Web.Managers
                 return false;
         }
 
-        public async Task<int> ExchangeTableNoOf(string token, int? receiverId = null, string receiverDevice = null)
+        public async Task<int?> ExchangeTableNoOf(string token, int? receiverId = null, string receiverDevice = null)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["token"] = token;
@@ -169,8 +220,13 @@ namespace ArduinoConnect.Web.Managers
 
             var response = await _httpClient.Get("exchange/GetNoOfExchange", query.ToString());
 
-            var output = await response.Content.ReadAsStringAsync();
-            return int.Parse(output);
+            if (response.IsSuccessStatusCode)
+            {
+                var output = await response.Content.ReadAsStringAsync();
+                return int.Parse(output);
+            }
+            else
+                return null;
         }
         public async Task<ResponseModels.ExchangeTableModel> ExchangeTableNewest(string token, int? receiverId = null, string receiverDevice = null)
         {

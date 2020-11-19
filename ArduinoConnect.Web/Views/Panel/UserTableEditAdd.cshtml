@@ -1,0 +1,73 @@
+﻿@model ArduinoConnect.Web.RequestModels.UserTableModel
+
+@{
+    if (Model is null)
+        ViewData["Title"] = "Add table";
+    else
+        ViewData["Title"] = "Edit table";
+    ViewData["LoggedIn"] = true;
+}
+
+<h2 class="section-header">@((Model is null) ? "Add new table" : "Edit table")</h2>
+<hr />
+<div class="row">
+    <div class="col">
+        <form id="addEditForm" method="post" asp-action="@((Model is null) ? "UserTableAdd" : "UserTableUpdate")">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group" hidden>
+                <label asp-for="TableID" class="control-label"></label>
+                @if (Model is null)
+                {
+                    <input asp-for="TableID" class="form-control" value="0" />
+                }
+                else
+                {
+                    <input asp-for="TableID" class="form-control" />
+                }
+                <span asp-validation-for="TableID" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TableName" class="control-label"></label>
+                    <input asp-for="TableName" class="form-control" />
+                    <span asp-validation-for="TableName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TableDescription" class="control-label"></label>
+                    <textarea asp-for="TableDescription" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="TableDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="TableSchema" class="control-label"></label>
+                    <div class="table-responsive">
+                        <table id="tableSchemaTable" class="table"></table>
+                    </div>
+                    <input asp-for="TableSchema" class="form-control" hidden />
+                    <span asp-validation-for="TableSchema" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@((Model is null) ? "Add" : "Save")" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Tables">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <environment include="Development">
+        <script src="~/js/usertables_scripts.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/usertables_scripts.min.js" asp-append-version="true"></script>
+    </environment>
+    <script>jsonToTable($('#TableSchema').val());</script>
+}

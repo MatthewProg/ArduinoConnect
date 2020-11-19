@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ArduinoConnect.Web.Managers;
+using AutoMapper;
 using AutoMapper.Configuration.Conventions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -41,9 +42,9 @@ namespace ArduinoConnect.Web.Controllers
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
 
             var userTables = await _apiManager.UserTableGet(t);
-            if(userTables == null)
+            if (userTables == null)
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
-            
+
 
             ViewData["Token"] = t;
             ViewData["UserTables"] = userTables;
@@ -76,9 +77,9 @@ namespace ArduinoConnect.Web.Controllers
             return View();
         }
 
-        [Route("[controller]/[action]/{id}")]
+        [Route("[controller]/[action]")]
         [HttpPost("{id}")]
-        public async Task<IActionResult> DeleteUserTable(int id)
+        public async Task<IActionResult> DeleteUserTable([FromForm]int id)
         {
             var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
 
@@ -87,10 +88,93 @@ namespace ArduinoConnect.Web.Controllers
 
             var output = await _apiManager.UserTableDelete(t, id);
 
-            if(output)
+            if (output)
                 return RedirectToAction("UserTables");
             else
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
+        }
+
+        [Route("[controller]/[action]")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> UserTableUpdate([FromForm] RequestModels.UserTableModel model)
+        {
+            if (ModelState.IsValid == false)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var output = await _apiManager.UserTableUpdate(t, model);
+
+            if (output == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+            else
+                return RedirectToAction("UserTables");
+        }
+
+        [Route("[controller]/[action]")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> UserTableAdd([FromForm] RequestModels.UserTableModel model)
+        {
+            if (ModelState.IsValid == false)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            try
+            {
+                var obj = JToken.Parse(model.TableSchema);
+            }
+            catch
+            {
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+            }
+
+            var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+
+            if (t == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+            var result = await _apiManager.UserTableCreate(t, model);
+            if(result == null)
+                return RedirectToAction("Error", "Error", new { errorCode = 400 });
+            else
+                return RedirectToAction("UserTables");
+        }
+
+        [Route("[controller]/Table/{act}/{id?}")]
+        [HttpGet("{act}/{id?}")]
+        public async Task<IActionResult> AddEditUserTable(string act, int? id = null)
+        {
+            switch (act.ToUpper())
+            {
+                case "ADD":
+                    return View("UserTableEditAdd", null);
+                case "EDIT":
+                    if(id==null)
+                        return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+                    var t = HttpContext.User.FindFirst(ClaimTypes.Authentication)?.Value;
+                    if (t == null)
+                        return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+                    var modelList = await _apiManager.UserTableGet(t, id);
+                    if(modelList == null || modelList.Count == 0)
+                        return RedirectToAction("Error", "Error", new { errorCode = 400 });
+
+                    var model = new RequestModels.UserTableModel()
+                    {
+                        TableID = modelList[0].TableID,
+                        TableName = modelList[0].TableName,
+                        TableDescription = modelList[0].TableDescription,
+                        TableSchema = modelList[0].TableSchema
+                    };
+                    return View("UserTableEditAdd", model);
+                default:
+                    return RedirectToAction("Error", "Error", new { errorCode = 400 });
+            }
         }
 
 
@@ -274,7 +358,7 @@ namespace ArduinoConnect.Web.Controllers
         }
 
         [Route("[controller]/[action]/{token?}/{receiverId?}/{receiverDevice?}")]
-        public async Task<int> WaitingExchanges(string token = null, int? receiverId = null, string receiverDevice = null)
+        public async Task<int?> WaitingExchanges(string token = null, int? receiverId = null, string receiverDevice = null)
         {
             if(string.IsNullOrWhiteSpace(token))
             {

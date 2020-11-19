@@ -26,7 +26,7 @@
     "Production": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://192.168.2.192:5000"
+      "applicationUrl": "http://192.168.2.193:5000"
     }
   }
 }

@@ -21,5 +21,38 @@
       "renameLocals": true
     },
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/exchange_scripts.min.js",
+    "inputFiles": [
+      "wwwroot/js/exchange_scripts.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/datatable_scripts.min.js",
+    "inputFiles": [
+      "wwwroot/js/datatable_scripts.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/usertables_scripts.min.js",
+    "inputFiles": [
+      "wwwroot/js/usertables_scripts.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   }
 ]

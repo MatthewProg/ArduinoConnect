@@ -9,12 +9,18 @@
     <h3 class="">@UserTables.TableName</h3>
     <h3 class="ml-3 text-muted text-decoration-none"><i id="tabId">#@UserTables.TableID</i></h3>
 </div>
-<p>@UserTables.TableDescription</p>
+<p style="white-space:pre-line">@UserTables.TableDescription</p>
 
 <div id="dataTableTable">Loading...</div>
 
-@section Scripts 
+@section Scripts
 {
+    <environment include="Development">
+        <script src="~/js/datatable_scripts.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/datatable_scripts.min.js" asp-append-version="true"></script>
+    </environment>
     <script>
         window.onload = function () {
             setDataTable(@UserTables.TableID,0,25);
@@ -22,7 +28,7 @@
     </script>
 }
 
-@section ModalSection 
+@section ModalSection
 {
     <div id="modalDeleteProgess" class="modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-confirm">

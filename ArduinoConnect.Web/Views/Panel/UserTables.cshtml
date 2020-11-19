@@ -7,3 +7,36 @@
 
 <h2 class="section-header">Tables</h2>
 @{ await Html.RenderPartialAsync("_UserTablesPartial", UserTables); }
+
+@section ModalSection {
+    <div id="modalDelete" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header flex-column">
+                    <h4 class="modal-title text-center w-100">Are you sure?</h4>
+                    @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>*@
+                </div>
+                <div class="modal-body text-center">
+                    <p>Do you really want to delete this table? This process cannot be undone.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form class="mx-1" asp-action="DeleteUserTable" method="post">
+                        <input id="modalDeleteId" type="number" name="id" hidden />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts
+ {
+    <environment include="Development">
+        <script src="~/js/usertables_scripts.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/usertables_scripts.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -36,6 +36,19 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             var output = _dataAccess.ExecuteStoredProcedureReturnSingle<UserTableModel>(name, parameters);
             return output;
         }
+        public int GetNoOfUserTables(string token, int? tableId = null)
+        {
+            string name = "GetNoOfUserTables";
+
+            token = StringConverter.MakeWhitespaceNull(token);
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("token", token, System.Data.DbType.String);
+            parameters.Add("tableId", tableId, System.Data.DbType.Int32);
+
+            var output = _dataAccess.ExecuteStoredProcedureReturnSingle<int>(name, parameters);
+            return output;
+        }
         public UserTableModel CreateTable(string tableName, string tableDescription, string tableSchema, string token)
         {
             tableName = StringConverter.MakeWhitespaceNull(tableName);
@@ -61,7 +74,7 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
             tableSchema = StringConverter.MakeWhitespaceNull(tableSchema);
             token = StringConverter.MakeWhitespaceNull(token);
 
-            string name = "ChangeUserTables";
+            string name = "UpdateUserTables";
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("tableName", tableName, System.Data.DbType.String);
@@ -93,6 +106,11 @@ namespace ArduinoConnect.DataAccess.BusinessLogic
 
         //GetTable
         public UserTableModel GetTable(int tableId, TokenModel token) => GetTable(tableId, token.Token);
+
+
+        //GetNoOfUserTables
+        public int GetNoOfUserTables(TokenModel token, int? tableId = null)
+            => GetNoOfUserTables(token.Token, tableId);
 
 
         //CreateTable

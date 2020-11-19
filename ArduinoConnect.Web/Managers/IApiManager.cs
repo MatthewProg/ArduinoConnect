@@ -13,11 +13,14 @@ namespace ArduinoConnect.Web.Managers
         Task<bool> ExchangeTableDelete(string token, int? receiverId = null, string receiverDevice = null);
         Task<bool> ExchangeTableNew(string token, RequestModels.ExchangeTableModel model);
         Task<ResponseModels.ExchangeTableModel> ExchangeTableNewest(string token, int? receiverId = null, string receiverDevice = null);
-        Task<int> ExchangeTableNoOf(string token, int? receiverId = null, string receiverDevice = null);
+        Task<int?> ExchangeTableNoOf(string token, int? receiverId = null, string receiverDevice = null);
         Task<ResponseModels.ExchangeTableModel> ExchangeTableOldest(string token, int? receiverId = null, string receiverDevice = null);
         Task<bool> TokenExists(string token);
         Task<ResponseModels.TokenModel> TokenGenerateNew();
+        Task<ResponseModels.UserTableModel> UserTableCreate(string token, RequestModels.UserTableModel model);
         Task<bool> UserTableDelete(string token, int tableId);
         Task<List<ResponseModels.UserTableModel>> UserTableGet(string token, int? tableId = null);
+        Task<int?> UserTableGetNoOf(string token, int? tableId = null);
+        Task<ResponseModels.UserTableModel> UserTableUpdate(string token, RequestModels.UserTableModel model);
     }
 }
