@@ -1,17 +1,12 @@
-﻿using ArduinoConnect.DataAccess.DataAccess;
-using ArduinoConnect.Web.Managers;
-using ArduinoConnect.Web.Models;
+﻿using ArduinoConnect.Web.Managers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -39,7 +34,7 @@ namespace ArduinoConnect.Web.Controllers
                 var res = await VerifyToken(t) as JsonResult;
                 bool good = false;
                 bool ok = bool.TryParse(res.Value.ToString(), out good);
-                if (good && ok)
+                if(good && ok)
                     return RedirectToAction("Info", "Panel");
             }
             return View();
@@ -50,7 +45,7 @@ namespace ArduinoConnect.Web.Controllers
         {
             var obj = await _apiManager.TokenGenerateNew();
 
-            if (obj == null)
+            if(obj == null)
                 return RedirectToAction("Error", "Error", new { errorCode = 400 });
 
             return await Login(obj.Token);
@@ -63,7 +58,7 @@ namespace ArduinoConnect.Web.Controllers
             var res = await VerifyToken(token) as JsonResult;
             bool good = false;
             bool ok = bool.TryParse(res.Value.ToString(), out good);
-            if (ok && good)
+            if(ok && good)
             {
                 var claims = new List<Claim>
                 {
@@ -96,7 +91,7 @@ namespace ArduinoConnect.Web.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
                 HttpResponseMessage response = await client.GetAsync(_apiUrl + $"exchange/GetNoOfExchange?token={token}");
-                if (response.IsSuccessStatusCode)
+                if(response.IsSuccessStatusCode)
                     return Json(true);
                 else
                     return Json("Token doesn't exist!");

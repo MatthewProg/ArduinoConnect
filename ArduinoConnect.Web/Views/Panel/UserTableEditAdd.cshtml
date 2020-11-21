@@ -18,7 +18,7 @@
 
             <div class="form-group" hidden>
                 <label asp-for="TableID" class="control-label"></label>
-                @if (Model is null)
+                @if(Model is null)
                 {
                     <input asp-for="TableID" class="form-control" value="0" />
                 }

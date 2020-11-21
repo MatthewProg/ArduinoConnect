@@ -37,7 +37,7 @@ namespace ArduinoConnect.Web.Controllers.API
         {
             var output = _dataTablesProcessor.GetNoOfDataTables(token, tableId);
 
-            if (output == -1)
+            if(output == -1)
                 return BadRequest();
             else
                 return Ok(output);
@@ -48,7 +48,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpGet("{token}/{tableId?}/{offset?}/{fetch?}")]
         public IActionResult GetTablesOffset([FromQuery] string token, [FromQuery] int? tableId = null, [FromQuery] int offset = 0, [FromQuery] int fetch = 25)
         {
-            if (offset < 0 || fetch < 0)
+            if(offset < 0 || fetch < 0)
                 return BadRequest();
 
             var got = _dataTablesProcessor.GetDataTablesOffset(token, tableId, offset, fetch);
@@ -63,7 +63,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpPost("{token}")]
         public IActionResult Add([FromQuery] string token, [FromBody] RequestModels.DataTableModel value)
         {
-            if (ModelState.IsValid == false)
+            if(ModelState.IsValid == false)
                 return BadRequest();
 
             var mapped = _mapper.Map<DataAccess.Models.DataTableModel>(value);
@@ -72,10 +72,10 @@ namespace ArduinoConnect.Web.Controllers.API
 
             var output = _mapper.Map<ResponseModels.DataTableModel>(added);
 
-            if (output == null)
+            if(output == null)
                 return BadRequest();
             else
-                return Created($"{Request.Scheme}://{Request.Host.Value}/api/data/GetTables",output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/data/GetTables", output);
         }
 
         //DELETE: api/data/Delete?token=XXX&tableId=X&id=X
@@ -85,7 +85,7 @@ namespace ArduinoConnect.Web.Controllers.API
         {
             var deleted = _dataTablesProcessor.DeleteDataTables(token, tableId, id);
 
-            if (deleted >= 0)
+            if(deleted >= 0)
                 return Ok(deleted);
             else
                 return BadRequest();

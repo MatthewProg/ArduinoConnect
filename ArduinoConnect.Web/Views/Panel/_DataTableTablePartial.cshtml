@@ -8,8 +8,8 @@
     {
         keys = Newtonsoft.Json.Linq.JObject.Parse(UserTables.TableSchema);
 
-        if (string.IsNullOrWhiteSpace(UserTables.TableSchema)) hasSchema = false;
-        if (keys.Count == 0) hasSchema = false;
+        if(string.IsNullOrWhiteSpace(UserTables.TableSchema)) hasSchema = false;
+        if(keys.Count == 0) hasSchema = false;
     }
     catch
     {
@@ -42,35 +42,18 @@
                         <div class="col">
                             <span>Order by: </span>
                             <select name="orderCol">
-                                @if (orderCol == "ID")
-                                {
-                                    <option selected>ID</option>
- }
-                                else
-                                {
-                                    <option>ID</option>
-}
-                                @if (orderCol == "AddTime")
-                                {
-                                    <option value="AddTime" selected>Add time</option>
- }
-                                else
-                                {
-                                    <option value="AddTime">Add time</option>
-}
+                                @if(orderCol == "ID") { <option selected>ID</option> }
+                                else { <option>ID</option>}
 
-                                @if (hasSchema && parse)
+                                @if(orderCol == "AddTime") { <option value="AddTime" selected>Add time</option> }
+                                else { <option value="AddTime">Add time</option> }
+
+                                @if(hasSchema && parse)
                                 {
-                                    foreach (var key in keys)
+                                    foreach(var key in keys)
                                     {
-                                        @if (orderCol == key.Key)
-                                        {
-                                            <option selected>@Html.Raw($"{key.Key}")</option>
- }
-                                        else
-                                        {
-                                            <option>@Html.Raw($"{key.Key}")</option>
-}
+                                        @if(orderCol == key.Key) { <option selected>@Html.Raw($"{key.Key}")</option> }
+                                        else { <option>@Html.Raw($"{key.Key}")</option> }
                                     }
                                 }
                                 else
@@ -79,7 +62,7 @@
                                 }
                             </select>
                             <select name="order">
-                                @if (order == "ASC")
+                                @if(order == "ASC")
                                 {
                                     <option value="ASC" selected>Ascending</option>
                                     <option value="DESC">Descending</option>
@@ -98,10 +81,10 @@
                         <div class="col">
                             Display:
                             <div class="radio-group d-inline-flex">
-                                <input type="radio" id="display-25" name="displayData" value="25" @if (displayData == 25) { <text> checked</text> }><label for="display-25">25</label>
-                                <input type="radio" id="display-50" name="displayData" value="50" @if (displayData == 50) { <text> checked</text> }><label for="display-50">50</label>
-                                <input type="radio" id="display-75" name="displayData" value="75" @if (displayData == 75) { <text> checked</text> }><label for="display-75">75</label>
-                                <input type="radio" id="display-100" name="displayData" value="100" @if (displayData == 100) { <text> checked</text> }><label for="display-100">100</label>
+                                <input type="radio" id="display-25" name="displayData" value="25" @if(displayData == 25) { <text> checked</text> }><label for="display-25">25</label>
+                                <input type="radio" id="display-50" name="displayData" value="50" @if(displayData == 50) { <text> checked</text> }><label for="display-50">50</label>
+                                <input type="radio" id="display-75" name="displayData" value="75" @if(displayData == 75) { <text> checked</text> }><label for="display-75">75</label>
+                                <input type="radio" id="display-100" name="displayData" value="100" @if(displayData == 100) { <text> checked</text> }><label for="display-100">100</label>
                             </div>
                         </div>
                     </div>
@@ -120,9 +103,9 @@
                     <th></th>
                     <th>ID (int)</th>
                     <th>Add time (datetime)</th>
-                    @if (hasSchema && parse)
+                    @if(hasSchema && parse)
                     {
-                        foreach (var key in keys)
+                        foreach(var key in keys)
                         {
                             <th>@Html.Raw($"{key.Key} ({key.Value})")</th>
                         }
@@ -136,20 +119,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var val in Data)
+                @foreach(var val in Data)
                 {
                     <tr id="datarow-@val.ID" class="collapsed" data-toggle="collapse" data-target="#jsonCollapse-@val.ID">
                         <td><input type="checkbox" name="check-@val.ID" /></td>
                         <td>@val.ID</td>
                         <td>@val.AddTime</td>
-                        @if (hasSchema && parse)
+                        @if(hasSchema && parse)
                         {
                             try
                             {
                                 var par = Newtonsoft.Json.Linq.JObject.Parse(val.Data);
-                                foreach (var key in keys)
+                                foreach(var key in keys)
                                 {
-                                    if (par.Property(key.Key) == null)
+                                    if(par.Property(key.Key) == null)
                                     {
                                         <td><i>NULL</i></td>
                                     }
@@ -221,7 +204,7 @@
             </tbody>
         </table>
     </div>
-    @if (Data.Count > 0)
+    @if(Data.Count > 0)
     {
         <div class="d-inline-flex">
             <input type="checkbox" id="allSelected" hidden />
@@ -231,7 +214,7 @@
     }
     <div class="d-flex justify-content-center text-center">
         <ul class="pagination">
-            @if (page > 0)
+            @if(page > 0)
             {
                 <li class="page-item">
                     <a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, 0,@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));" tabindex="-1">First</a>
@@ -241,7 +224,7 @@
             <li class="page-item active">
                 <a class="page-link" href="#">@Html.Raw(page + 1) <span class="sr-only">(current)</span></a>
             </li>
-            @if (page < lastPage)
+            @if(page < lastPage)
             {
                 <li class="page-item">
                     <a class="page-link" href="#" onclick="setDataTable(@UserTables.TableID, @Html.Raw(page + 1),@Html.Raw(displayData), false, '@Html.Raw(order)','@Html.Raw(orderCol)',@((parse) ? "true" : "false"));">@Html.Raw(page + 2)</a>

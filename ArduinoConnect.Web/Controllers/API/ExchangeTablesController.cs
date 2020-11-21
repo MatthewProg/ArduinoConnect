@@ -61,7 +61,7 @@ namespace ArduinoConnect.Web.Controllers.API
         {
             var output = _exchangeTablesProcessor.GetNoOfExchange(token, receiverDevice, receiverID);
 
-            if (output == -1)
+            if(output == -1)
                 return BadRequest();
             else
                 return Ok(output);
@@ -72,7 +72,7 @@ namespace ArduinoConnect.Web.Controllers.API
         public IActionResult Delete([FromQuery] string token, [FromQuery] string receiverDevice = null, [FromQuery] int? receiverID = null)
         {
             var output = _exchangeTablesProcessor.ClearExchange(token, receiverDevice, receiverID);
-            if (output == -1)
+            if(output == -1)
                 return BadRequest();
             else
                 return Ok(output);
@@ -82,7 +82,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpPost("{token}")]
         public IActionResult Post([FromQuery] string token, [FromBody] RequestModels.ExchangeTableModel value)
         {
-            if (ModelState.IsValid == false)
+            if(ModelState.IsValid == false)
                 return BadRequest();
 
             var obj = _mapper.Map<DataAccess.Models.ExchangeTableModel>(value);
@@ -90,10 +90,10 @@ namespace ArduinoConnect.Web.Controllers.API
             var action = _exchangeTablesProcessor.CreateExchange(token, obj);
 
             var output = _mapper.Map<ResponseModels.ExchangeTableModel>(action);
-            if (output == null)
+            if(output == null)
                 return BadRequest();
             else
-                return Created($"{Request.Scheme}://{Request.Host.Value}/api/exchange",output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/exchange", output);
         }
     }
 }

@@ -61,7 +61,7 @@
     <environment exclude="Development">
         <script src="~/js/exchange_scripts.min.js" asp-append-version="true"></script>
     </environment>
-    @if ((bool)ViewData["MessageSent"])
+    @if((bool)ViewData["MessageSent"])
     {
         <script>$('#sentToast').toast('show');</script>
     }

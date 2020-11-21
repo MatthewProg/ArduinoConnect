@@ -23,7 +23,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpGet("{token}/{tableId?}")]
         public IActionResult GetTables([FromQuery] string token, [FromQuery] int? tableId = null)
         {
-            if (tableId == null || tableId == -1)
+            if(tableId == null || tableId == -1)
             {
                 var list = _userTablesProcessor.GetTables(token);
                 var output = _mapper.Map<List<ResponseModels.UserTableModel>>(list);
@@ -35,7 +35,7 @@ namespace ArduinoConnect.Web.Controllers.API
                 var table = _userTablesProcessor.GetTable((int)tableId, token);
                 var output = _mapper.Map<ResponseModels.UserTableModel>(table);
 
-                if (output == null)
+                if(output == null)
                     return BadRequest();
                 else
                     return Ok(output);
@@ -49,7 +49,7 @@ namespace ArduinoConnect.Web.Controllers.API
         {
             var output = _userTablesProcessor.GetNoOfUserTables(token, tableId);
 
-            if (output == -1)
+            if(output == -1)
                 return BadRequest();
             else
                 return Ok(output);
@@ -60,7 +60,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpPost("{token}")]
         public IActionResult Create([FromQuery] string token, [FromBody] RequestModels.UserTableModel value)
         {
-            if (ModelState.IsValid == false)
+            if(ModelState.IsValid == false)
                 return BadRequest();
 
             var mapped = _mapper.Map<DataAccess.Models.UserTableModel>(value);
@@ -68,10 +68,10 @@ namespace ArduinoConnect.Web.Controllers.API
             var created = _userTablesProcessor.CreateTable(mapped, token);
 
             var output = _mapper.Map<ResponseModels.UserTableModel>(created);
-            if (output == null)
+            if(output == null)
                 return BadRequest();
             else
-                return Created($"{Request.Scheme}://{Request.Host.Value}/api/tables/GetTables",output);
+                return Created($"{Request.Scheme}://{Request.Host.Value}/api/tables/GetTables", output);
         }
 
         //PUT: api/tables/Update?token=XXX
@@ -79,7 +79,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpPut("{token}")]
         public IActionResult Update([FromQuery] string token, [FromBody] RequestModels.UserTableModel value)
         {
-            if (ModelState.IsValid == false)
+            if(ModelState.IsValid == false)
                 return BadRequest();
 
             var mapped = _mapper.Map<DataAccess.Models.UserTableModel>(value);
@@ -87,7 +87,7 @@ namespace ArduinoConnect.Web.Controllers.API
             var updated = _userTablesProcessor.UpdateTable(mapped, mapped.TableID, token);
 
             var response = _mapper.Map<ResponseModels.UserTableModel>(updated);
-            if (response == null)
+            if(response == null)
                 return BadRequest();
             else
                 return Ok(response);
@@ -98,7 +98,7 @@ namespace ArduinoConnect.Web.Controllers.API
         [HttpDelete("{token}/{tableId}")]
         public IActionResult Delete([FromQuery] string token, [FromQuery] int tableId)
         {
-            if (_userTablesProcessor.DeleteTable(tableId, token))
+            if(_userTablesProcessor.DeleteTable(tableId, token))
                 return Ok();
             else
                 return BadRequest();

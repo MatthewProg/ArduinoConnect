@@ -30,7 +30,7 @@ namespace ArduinoConnect.Web.Controllers.API
         public IActionResult Delete([FromQuery] string token)
         {
             var output = _tokenProcessor.DeleteToken(token);
-            if (output == true)
+            if(output == true)
                 return Ok();
             else
                 return BadRequest();
