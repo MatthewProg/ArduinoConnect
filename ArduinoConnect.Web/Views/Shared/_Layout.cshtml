@@ -6,11 +6,13 @@
     <title>@ViewData["Title"] - Arduino Connect</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/json-viewer/jquery.json-viewer.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/json-viewer/jquery.json-viewer.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="~/css/site.min.css" />
     </environment>
@@ -57,6 +59,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Panel" asp-action="Exchange">Exchanges</a>
                             </li>
                         </ul>
+                        <div class="dropdown-divider"></div>
                         <form class="form-inline nav-item" method="post" asp-controller="Start" asp-action="Logout">
                             <a href="#" onclick="this.closest('form').submit();return false;" class="nav-link text-dark px-0">Logout</a>
                         </form>

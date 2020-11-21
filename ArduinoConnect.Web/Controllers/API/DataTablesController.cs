@@ -58,7 +58,7 @@ namespace ArduinoConnect.Web.Controllers.API
             return Ok(output);
         }
 
-        //POST: api/data/Add?token=XXX&tableId=X
+        //POST: api/data/Add?token=XXX
         [Route("[action]")]
         [HttpPost("{token}")]
         public IActionResult Add([FromQuery] string token, [FromBody] RequestModels.DataTableModel value)

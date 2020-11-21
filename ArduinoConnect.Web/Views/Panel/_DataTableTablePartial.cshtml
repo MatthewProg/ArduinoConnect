@@ -114,7 +114,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table id="dataTable" class="table">
+        <table id="dataTable" class="table table-hover">
             <thead>
                 <tr>
                     <th></th>
@@ -138,7 +138,7 @@
             <tbody>
                 @foreach (var val in Data)
                 {
-                    <tr id="datarow-@val.ID">
+                    <tr id="datarow-@val.ID" class="collapsed" data-toggle="collapse" data-target="#jsonCollapse-@val.ID">
                         <td><input type="checkbox" name="check-@val.ID" /></td>
                         <td>@val.ID</td>
                         <td>@val.AddTime</td>
@@ -173,6 +173,43 @@
                             <td>@val.Data</td>
                             <td class="text-center"><button class="btn btn-danger dataDelete" onclick="dataDelete(@val.ID, @UserTables.TableID);"><i class="fa fa-times"></i></button></td>
                         }
+                    </tr>
+                    <tr id="jsonCollapse-@val.ID" class="collapse bg-white" data-parent="#dataTable">
+                        <td colspan="100">
+                            <div class="row m-0">
+                                <div class="col">
+                                    <span>RAW json:</span>
+                                    <div id="jsonData-@val.ID" class="py-0 col"></div>
+                                    <script>
+                                        var jsonData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(val));
+                                        $('#jsonData-@val.ID').jsonViewer(jsonData);
+                                    </script>
+                                </div>
+                                @{
+                                    bool validJson = true;
+                                    try
+                                    {
+                                        var par = Newtonsoft.Json.Linq.JObject.Parse(val.Data);
+                                    }
+                                    catch
+                                    {
+                                        validJson = false;
+                                    }
+
+                                    if (validJson)
+                                    {
+                                        <div class="col">
+                                            <span>Data json:</span>
+                                            <div id="jsonData-Data-@val.ID" class="py-0 col"></div>
+                                            <script>
+                                                var jsonDataData = @Html.Raw(val.Data);
+                                                $('#jsonData-Data-@val.ID').jsonViewer(jsonDataData);
+                                            </script>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </td>
                     </tr>
                 }
                 @if (Data.Count == 0)

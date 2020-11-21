@@ -1,5 +1,5 @@
 ﻿// ----------------------------
-//   UserTables
+//   UserTables (table)
 // ----------------------------
 $('#modalDelete').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
@@ -7,6 +7,10 @@ $('#modalDelete').on('show.bs.modal', function (event) {
     $('#modalDeleteId').val(recipient);
 });
 
+
+// ----------------------------
+//   UserTablesEditAdd
+// ----------------------------
 function jsonToTable(data) {
     var header = '<tr><th>No.</th><th>Name</th><th>Type</th><th></th></tr>';
     var add = '<tr><td class="text-center" colspan="4"><button type="button" class="btn btn-primary" onclick="tableNewRow();">New</button></td></tr>';
@@ -30,10 +34,20 @@ function jsonToTable(data) {
     }
     catch (e) {
         console.log("error: " + e);
-        var middle = '<tr><td colspan="4" class="text-center"><button type="button" class="btn btn-danger">CLEAR SCHEME</button><span class="mx-3 text-danger font-weight-bold">ERROR!</span><button type="button" class="btn btn-danger">SHOW RAW</button></td></tr>';
+        var middle = '<tr><td colspan="4" class="text-center"><button onclick="clearScheme();" type="button" class="btn btn-danger">CLEAR SCHEME</button><span class="mx-3 text-danger font-weight-bold">ERROR!</span><button type="button" onclick="showRawScheme();" class="btn btn-danger">SHOW RAW</button></td></tr>';
         add = '';
         $('#tableSchemaTable').html(header + middle + add);
     };
+}
+
+function clearScheme() {
+    $('#TableSchema').val("");
+    jsonToTable(null);
+}
+
+function showRawScheme() {
+    $('#TableSchema').removeAttr("hidden");
+    $('#tableSchemaTable').attr("hidden","hidden");
 }
 
 function tableNewRow() {
