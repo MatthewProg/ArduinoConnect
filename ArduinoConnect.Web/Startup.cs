@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace ArduinoConnect.Web
 {
@@ -68,6 +71,7 @@ namespace ArduinoConnect.Web
             }
             app.UseStaticFiles();
 
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -78,6 +82,8 @@ namespace ArduinoConnect.Web
                 MinimumSameSitePolicy = SameSiteMode.Strict
             };
             app.UseCookiePolicy(cookiePolicyOptions);
+
+            app.UseMiddleware<Utilities.ContentLengthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
