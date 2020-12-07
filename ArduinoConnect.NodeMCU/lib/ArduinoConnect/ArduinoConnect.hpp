@@ -9,6 +9,7 @@
 #include <ESP8266HTTPClient.h>
 
 #include "models/ExchangeModel.hpp"
+#include "models/DataTableModel.hpp"
 #include "utilities/Converters.hpp"
 #include "utilities/Defines.hpp"
 
@@ -21,6 +22,7 @@ public:
     ArduinoConnect(String apiUrl, String token);
     ~ArduinoConnect();
 
+    // EXCHANGE
     bool SendExchange(int ReceiverID, String Command, String ReceiverDevice);
     bool GetNewestExchange(ExchangeModel *out, int ReceiverID = -1, String ReceiverDevice = "");
     JsonObject GetNewestExchange(JsonObject filter, int ReceiverID = -1, String ReceiverDevice = "");
@@ -29,6 +31,13 @@ public:
     JsonArray GetAllExchange(JsonArray filter, int ReceiverID = -1, String ReceiverDevice = "");
     int GetNoOfExchange(int ReceiverID = -1, String ReceiverDevice = "");
     bool DeleteExchange(int ReceiverID = -1, String ReceiverDevice = "");
+
+    // DATATABLE
+    JsonArray GetTables(JsonArray filter, int tableId = -1);
+    JsonArray GetTablesOffset(JsonArray filter, int tableId = -1, int offset = 0, int fetch = 10);
+    int GetNoOfData(int tableId = -1);
+    bool AddData(DataTableModel data);
+    bool DeleteData(int tableId = -1, int id = -1);
 };
 
 #endif

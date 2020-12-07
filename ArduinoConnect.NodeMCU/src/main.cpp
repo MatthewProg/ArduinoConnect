@@ -19,7 +19,7 @@ void setup()
     }
     Serial.println("\nConnected!");
 
-    ArduinoConnect ac("http://192.168.2.192:5000/api","264EE7BD447045B7A8F075DCEEE2B23A358960780BFB41B1B0");
+    ArduinoConnect ac("http://192.168.2.193:5000/api","264EE7BD447045B7A8F075DCEEE2B23A358960780BFB41B1B0");
 }
 
 void loop()

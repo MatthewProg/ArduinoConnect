@@ -2,7 +2,6 @@
 #define __EXCHANGEMODEL_HPP_INCLUDED__
 
 #include <Arduino.h>
-#include <ArduinoJson.h>
 
 struct ExchangeModel
 {
