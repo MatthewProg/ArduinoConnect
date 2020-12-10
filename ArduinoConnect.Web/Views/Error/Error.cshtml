@@ -1,0 +1,17 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Unexpected Error";
+    Layout = "_ErrorLayout";
+}
+
+<div class="text-center d-flex flex-column top-20 main-block">
+    <h1 class="font-weight-bold">Unexpected Error</h1>
+    <h3 class="font-weight-normal">Well, that's awkward..</h3>
+
+    @if(Model.ShowRequestId)
+    {
+        <div class="d-flex mt-auto justify-content-center pb-5">
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </div>
+    }
+</div>
