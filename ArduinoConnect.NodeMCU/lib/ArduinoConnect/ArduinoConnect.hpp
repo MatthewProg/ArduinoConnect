@@ -1,8 +1,8 @@
 #ifndef __ARDUINOCONNECT_HPP_INCLUDED__
 #define __ARDUINOCONNECT_HPP_INCLUDED__
 
-#define DEBUG_AC_INFO
-#define DEBUG_AC_DATA
+//#define DEBUG_AC_INFO
+//#define DEBUG_AC_DATA
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -11,6 +11,8 @@
 #include "models/ExchangeModel.hpp"
 #include "models/DataTableModel.hpp"
 #include "models/TokenModel.hpp"
+#include "models/ReceiversModel.hpp"
+#include "models/UserTableModel.hpp"
 #include "utilities/Converters.hpp"
 #include "utilities/Defines.hpp"
 
@@ -35,11 +37,18 @@ public:
     bool DeleteExchange(int ReceiverID = -1, String ReceiverDevice = "");
 
     // DATATABLE
-    JsonArray GetTables(JsonArray filter, int tableId = -1);
-    JsonArray GetTablesOffset(JsonArray filter, int tableId = -1, int offset = 0, int fetch = 10);
+    JsonArray GetDataTables(JsonArray filter, int tableId = -1);
+    JsonArray GetDataTablesOffset(JsonArray filter, int tableId = -1, int offset = 0, int fetch = 10);
     int GetNoOfData(int tableId = -1);
     bool AddData(DataTableModel data);
-    bool DeleteData(int tableId = -1, int id = -1);
+    bool DeleteData(int tableId, int id = -1);
+
+    // USERTABLE
+    JsonArray GetUserTables(int tableId = -1);
+    int GetNoOfUserTables(int tableId = -1);
+    bool AddUserTable(UserTableModel obj);
+    bool UpdateUserTable(UserTableModel obj);
+    bool DeleteUserTable(int tableId);
 
     // TOKENS
     TokenModel GenerateNewToken();

@@ -374,7 +374,7 @@ bool ArduinoConnect::DeleteExchange(int ReceiverID, String ReceiverDevice)
 //- - - - - - - - - - - - -
 //  DATA TABLE
 //- - - - - - - - - - - - -
-JsonArray ArduinoConnect::GetTables(JsonArray filter, int tableId)
+JsonArray ArduinoConnect::GetDataTables(JsonArray filter, int tableId)
 {
     DEBUG_INFO("BEGIN ", "GetTables()");
     HTTPClient http;
@@ -419,7 +419,7 @@ JsonArray ArduinoConnect::GetTables(JsonArray filter, int tableId)
     }
 }
 
-JsonArray ArduinoConnect::GetTablesOffset(JsonArray filter, int tableId , int offset, int fetch)
+JsonArray ArduinoConnect::GetDataTablesOffset(JsonArray filter, int tableId , int offset, int fetch)
 {
     DEBUG_INFO("BEGIN ", "GetTablesOffset()");
     HTTPClient http;
@@ -548,8 +548,215 @@ bool ArduinoConnect::DeleteData(int tableId, int id)
     HTTPClient http;
 
     String url = _apiUrl + "/data/Delete?token=" + _token;
-    if(tableId != -1) url += "&tableId=" + String(tableId);
+    url += "&tableId=" + String(tableId);
     if(id != -1) url += "&id=" + String(id);
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
+    int code = http.sendRequest("DELETE");
+    http.end();
+    DEBUG_INFO("Response code: ",code);
+    if(code==200)
+    {
+        #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(true);
+        #endif
+
+        DEBUG_INFO("END", "");
+        return true;
+    }
+    else
+    {
+        #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(false);
+        #endif
+
+        DEBUG_INFO("END", "");
+        return false;
+    }
+}
+
+//- - - - - - - - - - - - -
+// USERTABLE
+//- - - - - - - - - - - - -
+JsonArray ArduinoConnect::GetUserTables(int tableId)
+{
+    DEBUG_INFO("BEGIN ", "GetUserTables()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/tables/GetTables?token=" + _token;
+    if(tableId != -1) url += "&tableId=" + String(tableId);
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
+    int code = http.GET();
+    DEBUG_INFO("Response code: ",code);
+    if(code==200)
+    {
+        DEBUG_INFO("Response size: ",http.getSize());
+        DynamicJsonDocument doc(JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(5) + http.getSize());
+
+        String data = http.getString();
+        if(data[0] != '[')
+            data = "[" + data + "]";
+            
+        #ifdef DEBUG_AC_INFO
+        auto err = deserializeJson(doc,data);
+        #else
+        deserializeJson(doc,data);
+        #endif
+        
+        DEBUG_INFO("Doc mem usg: ",doc.memoryUsage());
+        DEBUG_INFO("Error code: ", err.c_str());
+
+        DEBUG_DATA(doc);
+
+        http.end();
+        DEBUG_INFO("END", "");
+        return doc.as<JsonArray>();
+    }
+    else
+    {
+        http.end();
+        DEBUG_INFO("END", "");
+        StaticJsonDocument<1> empty;
+        return empty.as<JsonArray>();
+    }
+}
+
+int ArduinoConnect::GetNoOfUserTables(int tableId)
+{
+    DEBUG_INFO("BEGIN ", "GetNoOfUserTables()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/tables/GetNoOfTables?token=" + _token;
+    if(tableId != -1) url += "&tableId=" + String(tableId);
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
+    int code = http.GET();
+    DEBUG_INFO("Response code: ",code);
+    if(code==200)
+    {
+        String out = http.getString();
+        
+        #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(out);
+        #endif
+
+        http.end();
+        DEBUG_INFO("END", "");
+        return out.toInt();
+    }
+    else
+    {
+        http.end();
+        DEBUG_INFO("END", "");
+        return -1;
+    }
+}
+
+bool ArduinoConnect::AddUserTable(UserTableModel obj)
+{
+    DEBUG_INFO("BEGIN ", "AddUserTable()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/tables/Create?token=" + _token;
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+    
+    http.addHeader("Content-Type", "application/json");
+
+    u16 buff_size = sizeof(obj.TableName) + sizeof(obj.TableDescription) + sizeof(obj.TableSchema) + JSON_OBJECT_SIZE(5) + 64;
+
+    DynamicJsonDocument data(buff_size);
+    data["TableID"] = 0;
+    data["OwnerID"] = 0;
+    data["TableName"] = obj.TableName;
+    data["TableDescription"] = obj.TableDescription;
+    data["TableSchema"] = obj.TableSchema;
+
+    String payload;
+    serializeJson(data,payload);
+
+    #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(payload);
+    #endif
+
+    int code = http.POST(payload);
+    DEBUG_INFO("Response code: ",code);
+    http.end();
+    DEBUG_INFO("END", "");
+    if(code>=200 && code<300)
+        return true;
+    else
+        return false;
+}
+
+bool ArduinoConnect::UpdateUserTable(UserTableModel obj)
+{
+    DEBUG_INFO("BEGIN ", "UpdateUserTable()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/tables/Update?token=" + _token;
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+    
+    http.addHeader("Content-Type", "application/json");
+
+    u16 buff_size = sizeof(obj.TableName) + sizeof(obj.TableDescription) + sizeof(obj.TableSchema) + JSON_OBJECT_SIZE(5) + 64;
+
+    DynamicJsonDocument data(buff_size);
+    data["TableID"] = obj.TableID;
+    data["OwnerID"] = 0;
+    data["TableName"] = obj.TableName;
+    data["TableDescription"] = obj.TableDescription;
+    data["TableSchema"] = obj.TableSchema;
+
+    String payload;
+    serializeJson(data,payload);
+
+    #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(payload);
+    #endif
+
+    int code = http.POST(payload);
+    DEBUG_INFO("Response code: ",code);
+    http.end();
+    DEBUG_INFO("END", "");
+    if(code>=200 && code<300)
+        return true;
+    else
+        return false;
+}
+
+bool ArduinoConnect::DeleteUserTable(int tableId)
+{
+    DEBUG_INFO("BEGIN ", "DeleteUserTable()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/tables/Delete?token=" + _token;
+    url += "&tableId=" + String(tableId);
 
     #ifdef ESP32
         http.begin(url);
