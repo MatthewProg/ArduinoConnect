@@ -18,6 +18,7 @@ class ArduinoConnect
 private:
     String _apiUrl;
     String _token;
+    WiFiClient _wifiClient;
 public:
     ArduinoConnect(String apiUrl, String token);
     ~ArduinoConnect();

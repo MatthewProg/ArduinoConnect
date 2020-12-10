@@ -17,7 +17,14 @@ bool ArduinoConnect::SendExchange(int ReceiverID, String Command, String Receive
 {
     DEBUG_INFO("BEGIN ", "SendExchange()");
     HTTPClient http;
-    http.begin(_apiUrl + "/exchange/Post?token=" + _token);
+    
+    String url = _apiUrl + "/exchange/Post?token=" + _token;
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
     
     http.addHeader("Content-Type", "application/json");
 
@@ -54,7 +61,12 @@ bool ArduinoConnect::GetNewestExchange(ExchangeModel *out, int ReceiverID, Strin
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -100,7 +112,12 @@ JsonObject ArduinoConnect::GetNewestExchange(JsonObject filter, int ReceiverID, 
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -141,7 +158,12 @@ bool ArduinoConnect::GetOldestExchange(ExchangeModel *out, int ReceiverID, Strin
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -188,7 +210,12 @@ JsonObject ArduinoConnect::GetOldestExchange(JsonObject filter, int ReceiverID, 
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -230,7 +257,12 @@ JsonArray ArduinoConnect::GetAllExchange(JsonArray filter, int ReceiverID, Strin
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -273,7 +305,12 @@ int ArduinoConnect::GetNoOfExchange(int ReceiverID, String ReceiverDevice)
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -305,7 +342,12 @@ bool ArduinoConnect::DeleteExchange(int ReceiverID, String ReceiverDevice)
     if(ReceiverID != -1) url += "&ReceiverID=" + String(ReceiverID);
     if(ReceiverDevice != "") url += "&ReceiverDevice=" + UrlConverter::Encode(ReceiverDevice);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+    
     int code = http.GET();
     http.end();
     DEBUG_INFO("Response code: ",code);
@@ -340,7 +382,12 @@ JsonArray ArduinoConnect::GetTables(JsonArray filter, int tableId)
     String url = _apiUrl + "/data/GetTables?token=" + _token;
     if(tableId != -1) url += "&tableId=" + String(tableId);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -382,7 +429,12 @@ JsonArray ArduinoConnect::GetTablesOffset(JsonArray filter, int tableId , int of
     url += "&offset=" + String(offset);
     url += "&fetch=" + String(fetch);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -422,7 +474,12 @@ int ArduinoConnect::GetNoOfData(int tableId)
     String url = _apiUrl + "/data/GetNoOfTables?token=" + _token;
     if(tableId != -1) url += "&tableId=" + String(tableId);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -449,7 +506,14 @@ bool ArduinoConnect::AddData(DataTableModel obj)
 {
     DEBUG_INFO("BEGIN ", "AddData()");
     HTTPClient http;
-    http.begin(_apiUrl + "/data/Add?token=" + _token);
+
+    String url = _apiUrl + "/data/Add?token=" + _token;
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
     
     http.addHeader("Content-Type", "application/json");
 
@@ -487,7 +551,12 @@ bool ArduinoConnect::DeleteData(int tableId, int id)
     if(tableId != -1) url += "&tableId=" + String(tableId);
     if(id != -1) url += "&id=" + String(id);
 
-    http.begin(url);
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
     int code = http.GET();
     http.end();
     DEBUG_INFO("Response code: ",code);
