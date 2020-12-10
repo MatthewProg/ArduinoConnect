@@ -10,6 +10,7 @@
 
 #include "models/ExchangeModel.hpp"
 #include "models/DataTableModel.hpp"
+#include "models/TokenModel.hpp"
 #include "utilities/Converters.hpp"
 #include "utilities/Defines.hpp"
 
@@ -39,6 +40,13 @@ public:
     int GetNoOfData(int tableId = -1);
     bool AddData(DataTableModel data);
     bool DeleteData(int tableId = -1, int id = -1);
+
+    // TOKENS
+    TokenModel GenerateNewToken();
+    bool DeleteToken(String token);
+
+    // RECEIVERS
+    JsonArray GetReceivers(int receiverId = -1, String description = "");
 };
 
 #endif

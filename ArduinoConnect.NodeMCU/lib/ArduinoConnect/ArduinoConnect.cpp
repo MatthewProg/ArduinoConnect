@@ -348,7 +348,7 @@ bool ArduinoConnect::DeleteExchange(int ReceiverID, String ReceiverDevice)
         http.begin(_wifiClient,url);
     #endif
     
-    int code = http.GET();
+    int code = http.sendRequest("DELETE");
     http.end();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -557,7 +557,7 @@ bool ArduinoConnect::DeleteData(int tableId, int id)
         http.begin(_wifiClient,url);
     #endif
 
-    int code = http.GET();
+    int code = http.sendRequest("DELETE");
     http.end();
     DEBUG_INFO("Response code: ",code);
     if(code==200)
@@ -577,5 +577,138 @@ bool ArduinoConnect::DeleteData(int tableId, int id)
 
         DEBUG_INFO("END", "");
         return false;
+    }
+}
+
+//- - - - - - - - - - - - -
+//  TOKENS
+//- - - - - - - - - - - - -
+TokenModel ArduinoConnect::GenerateNewToken()
+{
+    DEBUG_INFO("BEGIN ", "GenerateNewToken()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/Tokens/GenerateNew";
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
+    int code = http.GET();
+    DEBUG_INFO("Response code: ",code);
+    
+    TokenModel output;
+    if(code==200)
+    {
+        DEBUG_INFO("Response size: ",http.getSize());
+        DynamicJsonDocument doc(JSON_OBJECT_SIZE(2) + http.getSize());
+
+        #ifdef DEBUG_AC_INFO
+        auto err = deserializeJson(doc,http.getStream());
+        #else
+        deserializeJson(doc,http.getStream());
+        #endif
+        
+        DEBUG_INFO("Doc mem usg: ",doc.memoryUsage());
+        DEBUG_INFO("Error code: ", err.c_str());
+
+        DEBUG_DATA(doc);
+
+        http.end();
+        output.TokenID = doc["tokenID"].as<int>();
+        output.Token = doc["token"].as<String>();
+        DEBUG_INFO("END", "");
+        return output;
+    }
+    else
+    {
+        http.end();
+        DEBUG_INFO("END", "");
+        return output;
+    }
+}
+
+bool ArduinoConnect::DeleteToken(String token)
+{
+    DEBUG_INFO("BEGIN ", "DeleteToken()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/Tokens/Delete?token=" + token;
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+    
+    int code = http.sendRequest("DELETE");
+    if(code==200)
+    {
+        #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(true);
+        #endif
+
+        DEBUG_INFO("END", "");
+        return true;
+    }
+    else
+    {
+        #if defined(DEBUG_AC_DATA) || defined(DEBUG_AC_DATA_PRETTY)
+        Serial.println(false);
+        #endif
+
+        DEBUG_INFO("END", "");
+        return false;
+    }
+}
+
+//- - - - - - - - - - - - -
+//  RECEIVERS
+//- - - - - - - - - - - - -
+JsonArray ArduinoConnect::GetReceivers(int receiverId, String description)
+{
+    DEBUG_INFO("BEGIN ", "GetReceivers()");
+    HTTPClient http;
+
+    String url = _apiUrl + "/Receivers/GetReceivers?token=" + _token;
+    if(receiverId != -1) url += "&receiverId=" + String(receiverId);
+    if(description != "") url += "&description=" + UrlConverter::Encode(description);
+
+    #ifdef ESP32
+        http.begin(url);
+    #else
+        http.begin(_wifiClient,url);
+    #endif
+
+    int code = http.GET();
+    DEBUG_INFO("Response code: ",code);
+    if(code==200)
+    {
+        DEBUG_INFO("Response size: ",http.getSize());
+        DynamicJsonDocument doc(JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(3) + http.getSize());
+
+        #ifdef DEBUG_AC_INFO
+        auto err = deserializeJson(doc,http.getStream());
+        #else
+        deserializeJson(doc,http.getStream());
+        #endif
+
+        DEBUG_INFO("Doc mem usg: ",doc.memoryUsage());
+        DEBUG_INFO("Error code: ", err.c_str());
+
+        DEBUG_DATA(doc);
+
+        http.end();
+        DEBUG_INFO("END", "");
+        return doc.as<JsonArray>();
+    }
+    else
+    {
+        http.end();
+        StaticJsonDocument<1> empty;
+        DEBUG_INFO("END", "");
+        return empty.as<JsonArray>();
     }
 }
