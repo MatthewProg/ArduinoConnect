@@ -5,13 +5,19 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoConnect.Web", "ArduinoConnect.Web\ArduinoConnect.Web.csproj", "{C775E51D-CD8C-4D63-9667-9EF15A5F2BD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoConnect.DataAccess", "ArduinoConnect.DataAccess\ArduinoConnect.DataAccess.csproj", "{A4F948FF-8BBC-4E43-A5E2-1A207F6C57F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoConnect.DataAccess", "ArduinoConnect.DataAccess\ArduinoConnect.DataAccess.csproj", "{A4F948FF-8BBC-4E43-A5E2-1A207F6C57F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoConnect.DataAccess.Tests", "ArduinoConnect.DataAccess.Tests\ArduinoConnect.DataAccess.Tests.csproj", "{B233D48B-9B97-48F4-8B2E-75B6519F691D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoConnect.DataAccess.Tests", "ArduinoConnect.DataAccess.Tests\ArduinoConnect.DataAccess.Tests.csproj", "{B233D48B-9B97-48F4-8B2E-75B6519F691D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoConnect.Web.Tests", "ArduinoConnect.Web.Tests\ArduinoConnect.Web.Tests.csproj", "{621582B9-22A6-450B-B08E-49D9043CA887}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoConnect.Web.Tests", "ArduinoConnect.Web.Tests\ArduinoConnect.Web.Tests.csproj", "{621582B9-22A6-450B-B08E-49D9043CA887}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{60317FC7-6A98-4DC1-BBB8-E75CBEAF9B87}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A73EDBF-2762-4668-982F-B92D5F7BF5DA}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
