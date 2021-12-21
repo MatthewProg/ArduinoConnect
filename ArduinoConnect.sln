@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoConnect.Web", "ArduinoConnect.Web\ArduinoConnect.Web.csproj", "{C775E51D-CD8C-4D63-9667-9EF15A5F2BD6}"
 EndProject
@@ -17,6 +17,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B66B3B90-CA5B-4432-A8D1-EFE7BF3244C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{EAA9E8FD-E5BF-4489-B57D-571ED0C9F767}"
+	ProjectSection(SolutionItems) = preProject
+		docs\img\exchanges.png = docs\img\exchanges.png
+		docs\img\info.png = docs\img\info.png
+		docs\img\parsed.png = docs\img\parsed.png
+		docs\img\table.png = docs\img\table.png
 	EndProjectSection
 EndProject
 Global
@@ -48,6 +58,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B233D48B-9B97-48F4-8B2E-75B6519F691D} = {60317FC7-6A98-4DC1-BBB8-E75CBEAF9B87}
 		{621582B9-22A6-450B-B08E-49D9043CA887} = {60317FC7-6A98-4DC1-BBB8-E75CBEAF9B87}
+		{EAA9E8FD-E5BF-4489-B57D-571ED0C9F767} = {B66B3B90-CA5B-4432-A8D1-EFE7BF3244C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF6818F9-5636-447C-B421-EBAF39DA8E8C}

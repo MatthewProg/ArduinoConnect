@@ -1,7 +1,7 @@
 <h1 align="center">Arduino Connect (Web)</h1>
 
 <p align="center">
-    <a href="/./LICENSE"><img src="https://img.shields.io/github/license/VegetaTheKing/ArduinoConnect"></a>
+    <a href="/./LICENSE"><img src="https://img.shields.io/github/license/MatthewProg/ArduinoConnect"></a>
 </p>
 
 <details open="open">
@@ -15,6 +15,7 @@
             <li><a href="#set-up">Set up</a></li>
         </ul>
     </li>
+    <li><a href="#screenshots">Screenshots</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -39,24 +40,41 @@ The project a contains web platform with UI and API as well as ready to use libr
 ### Set up
 
 ##### Application projects
-1. Clone repository `git clone https://github.com/VegetaTheKing/ArduinoConnect.git`
+1. Clone repository `git clone https://github.com/MatthewProg/ArduinoConnect.git`
 2. Open `ArduinoConnect.sln`
 
 ##### NodeMCU project
-1. Clone repository `git clone https://github.com/VegetaTheKing/ArduinoConnect.git`
+1. Clone repository `git clone https://github.com/MatthewProg/ArduinoConnect.git`
 2. Install PlatformIO IDE from <a href="https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide">link</a>
 3. Open VS Code
 4. In PIO Home click Open project
 5. Navigate to repo location and open `ArduinoConnect.NodeMCU`
 
 ##### MS SQL database
-1. Clone repository `git clone https://github.com/VegetaTheKing/ArduinoConnect.git`
+1. Clone repository `git clone https://github.com/MatthewProg/ArduinoConnect.git`
 2. Open Microsoft SQL Server Management Studio
 3. Login to server
 4. Add new login to SQL Server named `dbuser` with password `IoT_W@rld`
 5. Databases->RMB->Restore database, select device and then navigate to `ArduinoConnectAddictional/ArduinoConnect.bak`
 
 `NOTE: You can use any other database, SQL is in ArduinoConnectAddictional, just remember to change connection string`
+
+## Screenshots
+
+<table>
+    <tr>
+        <th style="text-align:center"><a href="/./docs/img/info.png"><img alt="main" src="/./docs/img/info.png"></a></th>
+        <th style="text-align:center"><a href="/./docs/img/table.png"><img alt="table" src="/./docs/img/table.png"></a></th>
+        <th style="text-align:center"><a href="/./docs/img/parsed.png"><img alt="parsing" src="/./docs/img/parsed.png"></a></th>
+        <th style="text-align:center"><a href="/./docs/img/exchanges.png"><img alt="exchanges" src="/./docs/img/exchanges.png"></a></th>
+    </tr>
+    <tr>
+        <td align="center">Info page</td>
+        <td align="center">User table editing</td>
+        <td align="center">Parsing user data</td>
+        <td align="center">Exchanging commands</td>
+    </tr>
+</table>
 
 ## [License](/./LICENSE)
 
